@@ -25,6 +25,9 @@ class Base
 
     if (!defined('MUBASE_PLUGIN_URL'))
       define('MUBASE_PLUGIN_URL', trailingslashit(plugin_dir_path(__FILE__)));
+
+    if (!defined('MUBASE_PLUGIN_VERSION'))
+      define('MUBASE_PLUGIN_VERSION', '0.0.1');
   }
 
   public function filters()
