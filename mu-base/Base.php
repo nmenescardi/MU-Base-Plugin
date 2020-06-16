@@ -2,7 +2,6 @@
 
 namespace MUBase;
 
-
 require_once 'Autoloader.php';
 Autoloader::register();
 
@@ -28,6 +27,18 @@ class Base
 
     if (!defined('MUBASE_PLUGIN_VERSION'))
       define('MUBASE_PLUGIN_VERSION', '0.0.1');
+
+    if (!defined('MUBASE_STYLES_HANDLER'))
+      define('MUBASE_STYLES_HANDLER', 'mubase-general-styles');
+
+    if (!defined('MUBASE_STYLES_URL'))
+      define('MUBASE_STYLES_URL', trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/css/');
+
+    if (!defined('MUBASE_SCRIPTS_HANDLER'))
+      define('MUBASE_SCRIPTS_HANDLER', 'mubase-general-scripts');
+
+    if (!defined('MUBASE_SCRIPTS_URL'))
+      define('MUBASE_SCRIPTS_URL', trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/js/');
   }
 
   public function filters()
@@ -54,6 +65,44 @@ class Base
 
   public function actions()
   {
+    add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
+
+    add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+  }
+
+  public function enqueue_styles()
+  {
+    /* wp_enqueue_style(
+      MUBASE_STYLES_HANDLER,
+      MUBASE_STYLES_URL . 'main.min.css',
+      array(),
+      $this->get_cache_version_number()
+    ); */
+  }
+
+  public function enqueue_scripts()
+  {
+    /* wp_enqueue_script(
+      MUBASE_SCRIPTS_HANDLER,
+      MUBASE_SCRIPTS_URL . 'main.min.js',
+      array(),
+      $this->get_cache_version_number(),
+      true
+    ); */
+  }
+
+  /**
+   * Get Plugin Version Number if it is a PROD environment. Otherwise, just the timestamp to break the cache
+   *
+   * @return mixed
+   */
+  protected function get_cache_version_number()
+  {
+
+    if (WP_DEBUG === true)
+      return microtime(true);
+
+    return MUBASE_PLUGIN_VERSION;
   }
 }
 
