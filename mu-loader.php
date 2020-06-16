@@ -4,4 +4,4 @@
  * Load MU Plugins
  */
 
-require_once 'mu-base/base.php';
+require_once 'mu-base/Base.php';
