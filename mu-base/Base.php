@@ -68,6 +68,17 @@ class Base
     add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
 
     add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+
+    $this->init_custom_post_types([
+      'MUBase\Core\PostTypes\CptExample'
+    ]);
+  }
+
+  protected function init_custom_post_types(array $cpt_classes)
+  {
+    foreach ($cpt_classes as $cpt_class) {
+      (new $cpt_class)->init();
+    }
   }
 
   public function enqueue_styles()
