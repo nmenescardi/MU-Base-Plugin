@@ -8,6 +8,8 @@ Autoloader::register();
 
 class Base
 {
+
+  use Pluggable;
 }
 
 
