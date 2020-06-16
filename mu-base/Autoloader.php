@@ -19,13 +19,9 @@ class Autoloader
 
     $class = substr($class, strlen(__NAMESPACE__));
 
-    /* $class = str_replace('\\', '/', $class);
-    $class = str_replace('MUBase', '', $class);
-    $class = str_replace('_', '', $class); */
-
     $file = dirname(__FILE__) . str_replace((array('\\', "\0")), array('/', ''), $class) . '.php';
 
-    if (is_file($file)) return $file;
+    if (is_file($file)) require $file;
   }
 
   /**
