@@ -5,7 +5,7 @@ namespace MUBase\Core\PostTypes;
 class CptExample extends AbstractCPT
 {
 
-  public function key(): string
+  public static function key(): string
   {
     return 'cpt-example';
   }

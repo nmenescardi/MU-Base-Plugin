@@ -5,7 +5,7 @@ namespace MUBase\Core\PostTypes;
 abstract class AbstractCPT
 {
 
-  abstract public function key(): string;
+  abstract public static function key(): string;
 
   abstract public function args(): array;
 
@@ -31,7 +31,7 @@ abstract class AbstractCPT
     );
 
     register_post_type(
-      $this->key(),
+      static::key(),
       $args
     );
   }
