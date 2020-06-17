@@ -72,12 +72,27 @@ class Base
     $this->init_custom_post_types([
       'MUBase\Core\PostTypes\CptExample'
     ]);
+
+    $this->init_custom_taxonomy([
+      'MUBase\Core\Taxonomies\TaxExample' => [
+        \MUBase\Core\PostTypes\CptExample::key()
+      ]
+    ]);
   }
 
   protected function init_custom_post_types(array $cpt_classes)
   {
     foreach ($cpt_classes as $cpt_class) {
       (new $cpt_class)->init();
+    }
+  }
+
+  protected function init_custom_taxonomy(array $taxonomies): void
+  {
+    foreach ($taxonomies as $tax_class => $associated_cpts) {
+
+      $taxonomy = new $tax_class($associated_cpts);
+      $taxonomy->init();
     }
   }
 
