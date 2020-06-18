@@ -6,3 +6,5 @@
 
 require_once 'mu-base/vendor/autoload.php';
 require_once 'mu-base/Base.php';
+
+new MUBase\Base();

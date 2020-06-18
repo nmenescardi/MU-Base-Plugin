@@ -2,41 +2,39 @@
 
 namespace MUBase;
 
+use Pimple\Container;
 
 class Base
 {
 
   use Pluggable;
 
+  const VERSION = '0.0.1';
+
+  const DOMAIN = 'mu-base';
+
   public function __construct()
   {
-    $this->constants();
+    $this->initContainer();
+
     $this->filters();
     $this->actions();
   }
 
-  public function constants()
+  protected function initContainer()
   {
-    if (!defined('MUBASE_PLUGIN_PATH'))
-      define('MUBASE_PLUGIN_PATH', trailingslashit(plugin_dir_path(__FILE__)));
 
-    if (!defined('MUBASE_PLUGIN_URL'))
-      define('MUBASE_PLUGIN_URL', trailingslashit(plugin_dir_path(__FILE__)));
-
-    if (!defined('MUBASE_PLUGIN_VERSION'))
-      define('MUBASE_PLUGIN_VERSION', '0.0.1');
-
-    if (!defined('MUBASE_STYLES_HANDLER'))
-      define('MUBASE_STYLES_HANDLER', 'mubase-general-styles');
-
-    if (!defined('MUBASE_STYLES_URL'))
-      define('MUBASE_STYLES_URL', trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/css/');
-
-    if (!defined('MUBASE_SCRIPTS_HANDLER'))
-      define('MUBASE_SCRIPTS_HANDLER', 'mubase-general-scripts');
-
-    if (!defined('MUBASE_SCRIPTS_URL'))
-      define('MUBASE_SCRIPTS_URL', trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/js/');
+    $this->container = new Container([
+      'mubase_domain'         => self::DOMAIN,
+      'mubase_version'        => self::VERSION,
+      'mubase_path'           => plugin_dir_path(__FILE__),
+      'mubase_relative_path'  => basename(plugin_dir_path(__FILE__)),
+      'mubase_url'            => plugin_dir_url(__FILE__),
+      'mubase_style_handler'  => 'mubase-general-styles',
+      'mubase_style_url'      => trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/css/',
+      'mubase_script_handler' => 'mubase-general-scripts',
+      'mubase_script_url'     => trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/js/',
+    ]);
   }
 
   public function filters()
@@ -126,9 +124,6 @@ class Base
     if (WP_DEBUG === true)
       return microtime(true);
 
-    return MUBASE_PLUGIN_VERSION;
+    return $this->container['mubase_version'];
   }
 }
-
-
-new Base;
