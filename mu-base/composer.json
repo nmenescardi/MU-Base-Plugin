@@ -1,0 +1,11 @@
+{
+  "name": "nmenescardi/mu-base",
+  "authors": [
+    {
+      "name": "Nicolas Menescardi"
+    }
+  ],
+  "require": {
+    "pimple/pimple": "~3.0"
+  }
+}
