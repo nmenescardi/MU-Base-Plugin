@@ -2,7 +2,7 @@
 
 namespace MUBase;
 
-use Pimple\Container;
+use MUBase\Core\DependencyInjection\Container;
 
 class Base
 {
@@ -12,6 +12,8 @@ class Base
   const VERSION = '0.0.1';
 
   const DOMAIN = 'mu-base';
+
+  protected $container;
 
   public function __construct()
   {
