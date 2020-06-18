@@ -5,6 +5,11 @@
       "name": "Nicolas Menescardi"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "MUBase\\": ""
+    }
+  },
   "require": {
     "pimple/pimple": "~3.0"
   }
