@@ -2,7 +2,6 @@
 
 namespace MUBase;
 
-require_once 'vendor/autoload.php';
 
 class Base
 {
