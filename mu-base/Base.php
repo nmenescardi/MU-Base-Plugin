@@ -3,6 +3,7 @@
 namespace MUBase;
 
 use MUBase\Core\DependencyInjection\Container;
+use MUBase\Core\Services\ACFService;
 
 class Base
 {
@@ -19,7 +20,6 @@ class Base
   {
     $this->initContainer();
 
-    $this->filters();
     $this->actions();
   }
 
@@ -36,29 +36,15 @@ class Base
       'mubase_style_url'      => trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/css/',
       'mubase_script_handler' => 'mubase-general-scripts',
       'mubase_script_url'     => trailingslashit(plugin_dir_url(__FILE__)) . 'assets/inc/js/',
+      'mubase_acf_json_path'  => plugin_dir_path(__FILE__) . 'acf',
     ]);
   }
 
-  public function filters()
+  public function load()
   {
-
-    // Saves ACF's settings under './acf' directory.
-    add_filter(
-      'acf/settings/save_json',
-      function ($path) {
-        $path = plugin_dir_path(__FILE__) . 'acf';
-        return $path;
-      }
-    );
-
-    // Automatically loads ACF's settings under './acf' directory.
-    add_filter(
-      'acf/settings/load_json',
-      function ($path) {
-        $path[] = plugin_dir_path(__FILE__) . 'acf';
-        return $path;
-      }
-    );
+    $this->container->registerServices([
+      ACFService::class,
+    ]);
   }
 
   public function actions()
