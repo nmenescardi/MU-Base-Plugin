@@ -3,7 +3,6 @@
 namespace MUBase;
 
 use MUBase\Core\DependencyInjection\Container;
-use MUBase\Core\Services\ACFService;
 
 class Base
 {
@@ -43,7 +42,8 @@ class Base
   public function load()
   {
     $this->container->registerServices([
-      ACFService::class,
+      \MUBase\Core\Services\CacheService::class,
+      \MUBase\Core\Services\ACFService::class,
     ]);
   }
 
