@@ -3,8 +3,9 @@
 namespace MUBase\Core\DependencyInjection;
 
 use Pimple\ServiceProviderInterface;
+use Pimple\Container as BaseContainer;
 
-class Container extends \Pimple\Container
+class Container extends BaseContainer
 {
 
   public function registerServices(array $services)
