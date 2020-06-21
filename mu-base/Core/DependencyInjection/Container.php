@@ -20,4 +20,29 @@ class Container extends BaseContainer
       $this->register($service);
     }
   }
+
+  public function get($id)
+  {
+    return $this->offsetGet($id);
+  }
+
+  public function has($id)
+  {
+    return $this->offsetExists($id);
+  }
+
+  public function __get($key)
+  {
+    return $this[$key];
+  }
+
+  public function __set($key, $value)
+  {
+    $this[$key] = $value;
+  }
+
+  public function __isset($key)
+  {
+    return isset($this[$key]);
+  }
 }
