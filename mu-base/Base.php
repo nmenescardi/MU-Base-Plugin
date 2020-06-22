@@ -23,7 +23,7 @@ class Base
   protected function initContainer()
   {
 
-    $this->container = new Container([
+    $this->container = Container::getInstance([
       'mubase_domain'         => self::DOMAIN,
       'mubase_version'        => self::VERSION,
       'mubase_path'           => plugin_dir_path(__FILE__),
