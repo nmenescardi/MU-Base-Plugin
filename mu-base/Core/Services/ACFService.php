@@ -3,7 +3,6 @@
 namespace MUBase\Core\Services;
 
 use Pimple\ServiceProviderInterface;
-use Pimple\Container;
 
 class ACFService implements ServiceProviderInterface
 {
