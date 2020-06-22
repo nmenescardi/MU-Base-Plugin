@@ -7,8 +7,6 @@ use MUBase\Core\DependencyInjection\Container;
 class Base
 {
 
-  use Pluggable;
-
   const VERSION = '0.0.1';
 
   const DOMAIN = 'mu-base';
