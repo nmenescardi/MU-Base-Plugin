@@ -6,6 +6,9 @@
     }
   ],
   "autoload": {
+    "files": [
+      "Core/Helpers/functions.php"
+    ],
     "psr-4": {
       "MUBase\\": ""
     }
