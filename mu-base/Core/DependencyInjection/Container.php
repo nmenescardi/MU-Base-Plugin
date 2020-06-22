@@ -43,6 +43,13 @@ class Container extends BaseContainer
     }
   }
 
+  public function instance($key, $value)
+  {
+    $this->offsetSet($key, $value);
+
+    return $this->offsetGet($key);
+  }
+
   public function get($id)
   {
     return $this->offsetGet($id);
