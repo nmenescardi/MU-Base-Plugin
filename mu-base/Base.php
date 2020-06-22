@@ -44,6 +44,8 @@ class Base
     $this->container->registerServices([
       \MUBase\Core\Services\CacheService::class,
       \MUBase\Core\Services\ACFService::class,
+      \MUBase\Core\Services\CPTService::class,
+      \MUBase\Core\Services\CustomTaxonomyService::class,
     ]);
   }
 
@@ -52,32 +54,6 @@ class Base
     add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
 
     add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-
-    $this->init_custom_post_types([
-      'MUBase\Core\PostTypes\CptExample'
-    ]);
-
-    $this->init_custom_taxonomy([
-      'MUBase\Core\Taxonomies\TaxExample' => [
-        \MUBase\Core\PostTypes\CptExample::key()
-      ]
-    ]);
-  }
-
-  protected function init_custom_post_types(array $cpt_classes)
-  {
-    foreach ($cpt_classes as $cpt_class) {
-      (new $cpt_class)->init();
-    }
-  }
-
-  protected function init_custom_taxonomy(array $taxonomies): void
-  {
-    foreach ($taxonomies as $tax_class => $associated_cpts) {
-
-      $taxonomy = new $tax_class($associated_cpts);
-      $taxonomy->init();
-    }
   }
 
   public function enqueue_styles()
