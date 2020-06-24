@@ -1,9 +1,12 @@
 <?php
 
-namespace MUBase\Core\PostTypes;
+namespace MUBase\Core\Models\Posts;
 
-class Repository
+abstract class AbstractPostRepository
 {
+
+  abstract public static function key(): string;
+
 
   protected $query;
 
