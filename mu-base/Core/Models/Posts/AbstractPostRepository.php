@@ -24,7 +24,7 @@ abstract class AbstractPostRepository
 
   public function save(array $post)
   {
-    if (!$post['ID']) return wp_update_post($post, true);
+    if (isset($post['ID'])) return wp_update_post($post, true);
 
     return wp_insert_post($post, true);
   }
