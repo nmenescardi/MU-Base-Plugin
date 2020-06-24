@@ -2,17 +2,24 @@
 
 namespace MUBase\Core\Models\Posts;
 
+use MUBase\Core\Models\Scopes\{All, ScopeInterface};
+
 abstract class AbstractPostRepository
 {
 
   abstract public static function key(): string;
 
 
+  protected $scopes;
+
   protected $query;
+
 
   public function __construct(\WP_Query $query)
   {
     $this->query = $query;
+
+    $this->initScopes();
   }
 
   public function save(array $post)
@@ -61,5 +68,31 @@ abstract class AbstractPostRepository
     $post = $this->find($args);
 
     return !empty($post[0]) ? $post[0] : null;
+  }
+
+
+  protected function initScopes()
+  {
+    $this->scopes = array_merge(
+      $this->concrete_scopes ?? [],
+      [
+        'all'         => \MUBase\Core\Models\Scopes\All::class,
+        'latest'      => \MUBase\Core\Models\Scopes\Latest::class,
+        'by_authors'  => \MUBase\Core\Models\Scopes\ByAuthors::class,
+      ]
+    );
+  }
+
+  public function __call($method, $args)
+  {
+    if (!isset($this->scopes[$method])) throw new \BadMethodCallException;
+
+    $scope = new $this->scopes[$method]($args);
+
+    if (!$scope instanceof ScopeInterface) throw new \BadMethodCallException;
+
+    $args = ($scope)->getArgs();
+
+    return []; //TODO: query using repository
   }
 }
