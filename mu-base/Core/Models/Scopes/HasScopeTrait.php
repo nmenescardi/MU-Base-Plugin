@@ -15,7 +15,7 @@ trait HasScopeTrait
       [
         'all'         => \MUBase\Core\Models\Scopes\All::class,
         'latest'      => \MUBase\Core\Models\Scopes\Latest::class,
-        'by_authors'  => \MUBase\Core\Models\Scopes\ByAuthors::class,
+        'byAuthor'    => \MUBase\Core\Models\Scopes\ByAuthor::class,
       ]
     );
   }
