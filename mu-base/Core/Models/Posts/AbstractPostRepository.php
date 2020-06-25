@@ -2,17 +2,16 @@
 
 namespace MUBase\Core\Models\Posts;
 
-use MUBase\Core\Models\Scopes\{All, ScopeInterface};
+use MUBase\Core\Models\Scopes\{All, ScopeInterface, HasScopeTrait};
 
 abstract class AbstractPostRepository
 {
 
+  use HasScopeTrait;
+
   abstract public static function key(): string;
 
-
   protected $properties;
-
-  protected $scopes;
 
   protected $query;
 
@@ -42,7 +41,6 @@ abstract class AbstractPostRepository
   {
     wp_delete_post($post->ID, $force);
   }
-
 
   public function findByAuthor(\WP_User $author, $limit = 10)
   {
@@ -77,19 +75,6 @@ abstract class AbstractPostRepository
     $post = $this->find($args);
 
     return !empty($post[0]) ? $post[0] : null;
-  }
-
-
-  protected function initScopes()
-  {
-    $this->scopes = array_merge(
-      $this->concrete_scopes ?? [],
-      [
-        'all'         => \MUBase\Core\Models\Scopes\All::class,
-        'latest'      => \MUBase\Core\Models\Scopes\Latest::class,
-        'by_authors'  => \MUBase\Core\Models\Scopes\ByAuthors::class,
-      ]
-    );
   }
 
   protected function initPropertiesMap()
@@ -138,18 +123,5 @@ abstract class AbstractPostRepository
     }
 
     return $result;
-  }
-
-  public function __call($method, $args)
-  {
-    if (!isset($this->scopes[$method])) throw new \BadMethodCallException;
-
-    $scope = new $this->scopes[$method]($args);
-
-    if (!$scope instanceof ScopeInterface) throw new \BadMethodCallException;
-
-    $args = ($scope)->getArgs();
-
-    return []; //TODO: query using repository
   }
 }
