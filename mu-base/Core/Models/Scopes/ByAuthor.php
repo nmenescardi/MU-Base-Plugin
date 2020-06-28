@@ -15,8 +15,17 @@ class ByAuthor extends AbstractScope
 
   public function getArgs(): array
   {
-    return $this->filteredAuthorIDs
+    $author_args =  $this->filteredAuthorIDs
       ? ['author' => $this->filteredAuthorIDs]
       : [];
+
+    return array_merge(
+      $author_args,
+      [
+        'posts_per_page'  => 200,
+        'orderby'         => 'date',
+        'order'           => 'ASC',
+      ]
+    );
   }
 }
