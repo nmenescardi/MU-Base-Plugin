@@ -11,12 +11,12 @@ trait HasScopeTrait
   protected function initScopes()
   {
     $this->scopes = array_merge(
-      $this->concrete_scopes ?? [],
       [
         'all'         => \MUBase\Core\Models\Scopes\All::class,
         'latest'      => \MUBase\Core\Models\Scopes\Latest::class,
         'byAuthor'    => \MUBase\Core\Models\Scopes\ByAuthor::class,
-      ]
+      ],
+      $this->concrete_scopes ?? []
     );
   }
 
