@@ -2,7 +2,7 @@
 
 namespace MUBase\Core\Models\Scopes;
 
-class Latest implements ScopeInterface
+class Latest extends AbstractScope
 {
 
   public function getArgs(): array

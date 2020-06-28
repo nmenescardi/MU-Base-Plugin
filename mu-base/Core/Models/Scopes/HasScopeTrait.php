@@ -26,7 +26,7 @@ trait HasScopeTrait
 
     $scope = new $this->scopes[$method]($args);
 
-    if (!$scope instanceof ScopeInterface) throw new \BadMethodCallException;
+    if (!$scope instanceof AbstractScope) throw new \BadMethodCallException;
 
     $args = ($scope)->getArgs();
 

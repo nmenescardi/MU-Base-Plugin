@@ -2,17 +2,8 @@
 
 namespace MUBase\Core\Models\Scopes;
 
-class All implements ScopeInterface
+class All extends AbstractScope
 {
-
-  protected $rawParams;
-
-  public function __construct(array $rawParams = [])
-  {
-    $this->rawParams = $rawParams;
-
-    $this->filterParams();
-  }
 
   protected function filterParams()
   {
