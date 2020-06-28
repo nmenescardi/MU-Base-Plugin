@@ -13,19 +13,10 @@ class ByAuthor extends AbstractScope
       : false;
   }
 
-  public function getArgs(): array
+  protected function concreteArgs(): array
   {
-    $author_args =  $this->filteredAuthorIDs
+    return  $this->filteredAuthorIDs
       ? ['author' => $this->filteredAuthorIDs]
       : [];
-
-    return array_merge(
-      $author_args,
-      [
-        'posts_per_page'  => 200,
-        'orderby'         => 'date',
-        'order'           => 'ASC',
-      ]
-    );
   }
 }
