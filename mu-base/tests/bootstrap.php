@@ -24,8 +24,8 @@ require_once $_tests_dir . '/includes/functions.php';
  */
 function _manually_load_plugin()
 {
-	require_once 'mu-base/vendor/autoload.php';
-	require_once 'mu-base/Base.php';
+	require_once './../mu-base/vendor/autoload.php';
+	require_once './../mu-base/Base.php';
 
 	$base = new MUBase\Base();
 	$base->load();
