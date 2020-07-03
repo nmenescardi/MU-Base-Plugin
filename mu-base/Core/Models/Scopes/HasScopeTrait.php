@@ -30,6 +30,6 @@ trait HasScopeTrait
 
     $args = ($scope)->getArgs();
 
-    return $args; //TODO: query using repository. 
+    return $this->find($args);
   }
 }
