@@ -16,9 +16,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$posts = $this->factory->post->create_many(
 			25,
-			[
-				'post_type' => 'cpt-example'
-			]
+			$this->merge_with_common_args()
 		);
 
 		$all = $example_model->all();
@@ -33,13 +31,21 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$posts = $this->factory->post->create_many(
 			25,
-			[
-				'post_type' => 'cpt-example'
-			]
+			$this->merge_with_common_args()
 		);
 
 		$latest = $example_model->latest(20);
 
 		$this->assertCount(20, $latest);
+	}
+
+
+
+	public function merge_with_common_args($args = [])
+	{
+		return array_merge(
+			['post_type' => 'cpt-example'],
+			$args
+		);
 	}
 }
