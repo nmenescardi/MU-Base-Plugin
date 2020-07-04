@@ -43,6 +43,7 @@ class Base
       \MUBase\Core\Services\CPTService::class,
       \MUBase\Core\Services\CustomTaxonomyService::class,
       \MUBase\Core\Services\EnqueueScriptService::class,
+      \MUBase\Core\Services\WordPressService::class,
     ]);
   }
 }
