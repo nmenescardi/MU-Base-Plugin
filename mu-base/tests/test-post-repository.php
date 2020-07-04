@@ -17,7 +17,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	{
 
 		// Example Model
-		$example_model = new \MUBase\Core\Models\Posts\Example(new WP_Query());
+		$example_model = new \MUBase\Core\Models\Posts\Example();
 
 		// All
 		$all = $example_model->all();
