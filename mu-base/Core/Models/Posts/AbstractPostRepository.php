@@ -4,6 +4,8 @@ namespace MUBase\Core\Models\Posts;
 
 use MUBase\Core\Models\Scopes\{All, ScopeInterface, HasScopeTrait};
 
+use function MUBase\Core\Helpers\app;
+
 abstract class AbstractPostRepository
 {
 
@@ -16,9 +18,9 @@ abstract class AbstractPostRepository
   protected $query;
 
 
-  public function __construct(\WP_Query $query)
+  public function __construct()
   {
-    $this->query = $query;
+    $this->query = app('wp.query');
 
     $this->initScopes();
 
