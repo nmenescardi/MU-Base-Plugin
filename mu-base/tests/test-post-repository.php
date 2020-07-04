@@ -3,6 +3,15 @@
 class PostRepositoryTest extends WP_UnitTestCase
 {
 
+	public function setup()
+	{
+		parent::setUp();
+
+		$this->postID = $this->factory->post->create([
+			'post_type' => 'cpt-example'
+		]);
+	}
+
 	/** @test */
 	public function get_all_scope()
 	{
@@ -13,7 +22,6 @@ class PostRepositoryTest extends WP_UnitTestCase
 		// All
 		$all = $example_model->all();
 
-
-		$this->assertTrue(true);
+		$this->assertCount(1, $all);
 	}
 }
