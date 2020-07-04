@@ -39,6 +39,49 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertCount(20, $latest);
 	}
 
+	/** @test */
+	public function get_by_author_scope()
+	{
+		$example_model = new \MUBase\Core\Models\Posts\Example();
+
+		$this->factory->post->create_many(
+			2,
+			$this->merge_with_common_args(['post_author' => 1])
+		);
+
+		$this->factory->post->create_many(
+			3,
+			$this->merge_with_common_args(['post_author' => 2])
+		);
+
+		$this->factory->post->create_many(
+			5,
+			$this->merge_with_common_args(['post_author' => 3])
+		);
+
+		// Author User ID 1
+		$this->assertCount(2, $example_model->byAuthor(1));
+
+		// Author User ID 2
+		$this->assertCount(3, $example_model->byAuthor(2));
+
+		// Author User ID 3
+		$this->assertCount(5, $example_model->byAuthor(3));
+
+		// Posts of Authors 1 and 3
+		$this->assertCount(7, $example_model->byAuthor([1, 3]));
+
+
+		// Another post type -> should not be included on the Example CPT query
+		$this->factory->post->create_many(
+			5,
+			['post_author' => 3]
+		);
+
+		// Still same results
+		$this->assertCount(5, $example_model->byAuthor(3));
+		$this->assertCount(7, $example_model->byAuthor([1, 3]));
+	}
 
 
 	public function merge_with_common_args($args = [])
