@@ -84,6 +84,12 @@ class PostRepositoryTest extends WP_UnitTestCase
 	}
 
 
+	/** @test */
+	public function get_related_scope()
+	{
+	}
+
+
 	public function merge_with_common_args($args = [])
 	{
 		return array_merge(
