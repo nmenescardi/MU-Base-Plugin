@@ -15,7 +15,7 @@ class Related extends AbstractScope
 
   protected function concreteArgs(): array
   {
-    $postID = 5; //TODO: exclude itself
+    $postID = 69; //$this->postID; //TODO: exclude itself
 
     $args = ['post__not_in'  => array($postID)];
 
@@ -24,7 +24,7 @@ class Related extends AbstractScope
       $this->taxonomyKey
     );
 
-    if (!empty($terms)) {
+    if (!$terms) {
 
       $termSlug = array_shift($terms);
 

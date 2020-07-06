@@ -87,6 +87,33 @@ class PostRepositoryTest extends WP_UnitTestCase
 	/** @test */
 	public function get_related_scope()
 	{
+		$new_term['title'] = 'Term To Match';
+		$new_term['slug'] = sanitize_title('Term To Match');
+		$taxonomy = 'base-example';
+
+		$term = wp_insert_term(
+			$new_term['title'],
+			$taxonomy
+		);
+
+		$example_model = new \MUBase\Core\Models\Posts\Example();
+
+		$related_posts = $this->factory->post->create_many(
+			2,
+			$this->merge_with_common_args([
+				'post_category' => array($term['term_taxonomy_id']),
+				'tax_input' => array(
+					'prominence' => $new_term['slug']
+				)
+			])
+		);
+
+		$not_related_posts = $this->factory->post->create_many(
+			3,
+			$this->merge_with_common_args()
+		);
+
+		$latest = $example_model->related($taxonomy);
 	}
 
 
