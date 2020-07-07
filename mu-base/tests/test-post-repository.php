@@ -143,6 +143,17 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertCount($amount_of_posts_to_match, $related_posts);
 	}
 
+	/** @test */
+	public function test_getting_proper_id_after_inserting_a_new_post()
+	{
+		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model->title = 'New Post';
+		$post_id = $example_model->save();
+
+		$this->assertTrue(is_numeric($post_id));
+		$this->assertTrue($post_id > 0);
+	}
+
 
 	public function merge_with_common_args($args = [])
 	{
