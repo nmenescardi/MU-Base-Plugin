@@ -15,6 +15,7 @@ trait HasScopeTrait
         'all'         => \MUBase\Core\Models\Scopes\All::class,
         'latest'      => \MUBase\Core\Models\Scopes\Latest::class,
         'byAuthor'    => \MUBase\Core\Models\Scopes\ByAuthor::class,
+        'byID'        => \MUBase\Core\Models\Scopes\ByID::class,
       ],
       $this->concrete_scopes ?? []
     );
