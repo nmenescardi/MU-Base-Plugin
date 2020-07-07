@@ -107,7 +107,6 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertCount(7, $example_model->byAuthor([1, 3]));
 	}
 
-
 	/** @test */
 	public function get_related_scope()
 	{
@@ -152,6 +151,24 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$this->assertTrue(is_numeric($post_id));
 		$this->assertTrue($post_id > 0);
+	}
+
+	/** @test */
+	public function test_matching_properties_after_inserting_a_new_post()
+	{
+		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model->title = rand_str();
+		$example_model->content = rand_str();
+		$post_id = $example_model->save();
+
+		$post_to_match = get_post($post_id);
+
+		$this->assertEquals($example_model->title, $post_to_match->post_title);
+		$this->assertEquals($example_model->content, $post_to_match->post_content);
+		$this->assertEquals($example_model->ID, $post_to_match->ID);
+		$this->assertEquals($example_model->status, $post_to_match->post_status);
+		$this->assertEquals($example_model->author, $post_to_match->post_author);
+		$this->assertEquals($example_model->date, $post_to_match->post_date);
 	}
 
 
