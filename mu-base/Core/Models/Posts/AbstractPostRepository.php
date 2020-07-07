@@ -36,7 +36,9 @@ abstract class AbstractPostRepository
     if (isset($properties['ID']) && !$properties['ID'])
       return wp_update_post($properties, true);
 
-    return wp_insert_post($properties, true);
+    $this->ID = wp_insert_post($properties, true);
+
+    return $this->ID;
   }
 
   public function remove(\WP_Post $post, $force = false)
