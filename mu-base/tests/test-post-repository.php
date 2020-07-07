@@ -25,6 +25,30 @@ class PostRepositoryTest extends WP_UnitTestCase
 	}
 
 	/** @test */
+	public function get_byID_scope()
+	{
+
+		$example_model = new \MUBase\Core\Models\Posts\Example();
+
+		$new_posts = $this->factory->post->create_many(
+			5,
+			$this->merge_with_common_args()
+		);
+
+		$some_id = $new_posts[2]; // Grab any ID
+
+		$post_byID = $example_model->byID($some_id);
+
+		$this->assertCount(1, $post_byID);
+
+
+		$ramdom_large_id = 9999999999;
+		$post_byID = $example_model->byID($ramdom_large_id);
+
+		$this->assertCount(0, $post_byID);
+	}
+
+	/** @test */
 	public function get_latest_scope_with_pagination()
 	{
 		$example_model = new \MUBase\Core\Models\Posts\Example();
