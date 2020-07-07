@@ -87,33 +87,36 @@ class PostRepositoryTest extends WP_UnitTestCase
 	/** @test */
 	public function get_related_scope()
 	{
-		$new_term['title'] = 'Term To Match';
-		$new_term['slug'] = sanitize_title('Term To Match');
+		$new_term = 'Term To Match';
 		$taxonomy = 'base-example';
 
 		$term = wp_insert_term(
-			$new_term['title'],
+			$new_term,
 			$taxonomy
 		);
 
 		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model->title = 'Post To relate';
+		$new_post_id = $example_model->save();
 
+		$amount_of_posts_to_match = 2;
 		$related_posts = $this->factory->post->create_many(
-			2,
-			$this->merge_with_common_args([
-				'post_category' => array($term['term_taxonomy_id']),
-				'tax_input' => array(
-					'prominence' => $new_term['slug']
-				)
-			])
+			$amount_of_posts_to_match,
+			$this->merge_with_common_args()
 		);
 
-		$not_related_posts = $this->factory->post->create_many(
+		foreach (array_merge($related_posts, [$new_post_id]) as $post_id) {
+			wp_set_object_terms($post_id, $term['term_id'], $taxonomy);
+		}
+
+		$non_related_posts = $this->factory->post->create_many(
 			3,
 			$this->merge_with_common_args()
 		);
 
-		$latest = $example_model->related($taxonomy);
+		$related_posts = $example_model->related($taxonomy);
+
+		$this->assertCount($amount_of_posts_to_match, $related_posts);
 	}
 
 
