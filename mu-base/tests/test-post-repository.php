@@ -30,20 +30,20 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$example_model = new \MUBase\Core\Models\Posts\Example();
 
-		$new_posts = $this->factory->post->create_many(
+		$new_post_ids = $this->factory->post->create_many(
 			5,
 			$this->merge_with_common_args()
 		);
 
-		$some_id = $new_posts[2]; // Grab any ID
+		$some_id = $new_post_ids[array_rand($new_post_ids)]; // Grab any ID
 
 		$post_byID = $example_model->byID($some_id);
 
 		$this->assertCount(1, $post_byID);
 
 
-		$ramdom_large_id = 9999999999;
-		$post_byID = $example_model->byID($ramdom_large_id);
+		$ridiculous_large_id = 9999999999;
+		$post_byID = $example_model->byID($ridiculous_large_id);
 
 		$this->assertCount(0, $post_byID);
 	}
