@@ -46,19 +46,6 @@ abstract class AbstractPostRepository
     wp_delete_post($post->ID, $force);
   }
 
-  public function findByAuthor(\WP_User $author, $limit = 10)
-  {
-    return $this->find([
-      'author' => $author->ID,
-      'posts_per_page' => $limit
-    ]);
-  }
-
-  public function findById($id)
-  {
-    return $this->findOne(['p' => $id]);
-  }
-
   protected function find(array $args)
   {
     $args = array_merge([
