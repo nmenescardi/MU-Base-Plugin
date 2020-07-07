@@ -9,9 +9,13 @@ abstract class AbstractScope
 
   protected $rawParams;
 
-  public function __construct(array $rawParams = [])
+  protected $model;
+
+  public function __construct(array $rawParams = [], $model)
   {
     $this->rawParams = $rawParams;
+
+    $this->model = $model;
 
     $this->filterParams();
   }

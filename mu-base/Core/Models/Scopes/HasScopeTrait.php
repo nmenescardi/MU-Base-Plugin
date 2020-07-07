@@ -24,7 +24,7 @@ trait HasScopeTrait
   {
     if (!isset($this->scopes[$method])) throw new \BadMethodCallException;
 
-    $scope = new $this->scopes[$method]($args);
+    $scope = new $this->scopes[$method]($args, $this);
 
     if (!$scope instanceof AbstractScope) throw new \BadMethodCallException;
 
