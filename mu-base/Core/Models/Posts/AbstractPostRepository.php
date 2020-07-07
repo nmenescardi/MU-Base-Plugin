@@ -36,9 +36,22 @@ abstract class AbstractPostRepository
     if (isset($properties['ID']) && !$properties['ID'])
       return wp_update_post($properties, true);
 
-    $this->ID = wp_insert_post($properties, true);
+    return $this->fillUpdatedPost(
+      wp_insert_post($properties, true)
+    );
+  }
 
-    return $this->ID;
+  protected function fillUpdatedPost($post_id)
+  {
+    if (!is_numeric($post_id) || $post_id < 1) return;
+
+    $updated_post = get_post($post_id);
+
+    foreach ($this->properties_map as $WP_prop => $object_prop) {
+      $this->$object_prop = $updated_post->$WP_prop;
+    }
+
+    return $post_id;
   }
 
   public function remove(\WP_Post $post, $force = false)
@@ -74,10 +87,13 @@ abstract class AbstractPostRepository
     $this->properties_map = array_merge(
       $this->props_map ?? [],
       [
-        'ID'          => 'ID',
-        'post_title'  => 'title',
-        'post_type'   => 'type',
-        'post_status' => 'status',
+        'ID'            => 'ID',
+        'post_title'    => 'title',
+        'post_type'     => 'type',
+        'post_status'   => 'status',
+        'post_content'  => 'content',
+        'post_author'   => 'author',
+        'post_date'     => 'date',
       ]
     );
   }
