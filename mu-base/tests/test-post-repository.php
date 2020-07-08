@@ -171,6 +171,26 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertEquals($example_model->date, $post_to_match->post_date);
 	}
 
+	/** @test */
+	public function test_post_status_when_inserting_a_new_post()
+	{
+		$statuses = [
+			'publish', 'draft', 'private', 'inherit', 'trash', 'pending', 'trash'
+		];
+
+		foreach ($statuses as $status) {
+
+			$example_model = new \MUBase\Core\Models\Posts\Example();
+			$example_model->title = rand_str();
+			$example_model->status = $status;
+			$post_id = $example_model->save();
+
+			$post_to_match = get_post($post_id);
+			$this->assertEquals($example_model->status, $post_to_match->post_status);
+			$this->assertEquals($status, get_post_status($post_id));
+		}
+	}
+
 
 	public function merge_with_common_args($args = [])
 	{
