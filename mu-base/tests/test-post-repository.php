@@ -1,5 +1,7 @@
 <?php
 
+use MUBase\Core\Models\Posts\Example as ExamplePostModel;
+
 class PostRepositoryTest extends WP_UnitTestCase
 {
 
@@ -14,7 +16,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	public function get_all_scope()
 	{
 
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 
 		$posts = $this->factory->post->create_many(
 			25,
@@ -30,7 +32,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	public function get_byID_scope()
 	{
 
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 
 		$new_post_ids = $this->factory->post->create_many(
 			5,
@@ -53,7 +55,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	/** @test */
 	public function get_latest_scope_with_pagination()
 	{
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 
 		$posts = $this->factory->post->create_many(
 			25,
@@ -68,7 +70,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	/** @test */
 	public function get_by_author_scope()
 	{
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 
 		$this->factory->post->create_many(
 			2,
@@ -120,7 +122,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$taxonomy
 		);
 
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 		$example_model->title = 'Post To relate';
 		$new_post_id = $example_model->save();
 
@@ -147,7 +149,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	/** @test */
 	public function test_getting_proper_id_after_inserting_a_new_post()
 	{
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 		$example_model->title = 'New Post';
 		$post_id = $example_model->save();
 
@@ -158,7 +160,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	/** @test */
 	public function test_matching_properties_after_inserting_a_new_post()
 	{
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 		$example_model->title = rand_str();
 		$example_model->content = rand_str();
 		$post_id = $example_model->save();
@@ -182,7 +184,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		foreach ($statuses as $status) {
 
-			$example_model = new \MUBase\Core\Models\Posts\Example();
+			$example_model = new ExamplePostModel();
 			$example_model->title = rand_str();
 			$example_model->status = $status;
 			$post_id = $example_model->save();
@@ -197,7 +199,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	public function test_post_author_when_inserting_a_new_post()
 	{
 
-		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model = new ExamplePostModel();
 		$example_model->title = rand_str();
 		$example_model->author = $this->author->ID;
 		$post_id = $example_model->save();
