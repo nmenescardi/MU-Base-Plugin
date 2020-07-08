@@ -208,6 +208,20 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertEquals($example_model->author, $post_to_match->post_author);
 	}
 
+	/** @test */
+	public function test_custom_past_date_when_inserting_a_new_post()
+	{
+		$past_date = strftime('%Y-%m-%d %H:%M:%S', strtotime('-1 day'));
+
+		$example_model = new ExamplePostModel();
+		$example_model->title = rand_str();
+		$example_model->date = $past_date;
+		$post_id = $example_model->save();
+
+		$post_to_match = get_post($post_id);
+		$this->assertEquals($example_model->date, $post_to_match->post_date);
+	}
+
 
 	public function merge_with_common_args($args = [])
 	{
