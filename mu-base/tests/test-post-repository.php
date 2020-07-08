@@ -6,6 +6,8 @@ class PostRepositoryTest extends WP_UnitTestCase
 	public function setup()
 	{
 		parent::setUp();
+
+		$this->author = $this->factory->user->create_and_get(array('role' => 'editor'));
 	}
 
 	/** @test */
@@ -189,6 +191,19 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$this->assertEquals($example_model->status, $post_to_match->post_status);
 			$this->assertEquals($status, get_post_status($post_id));
 		}
+	}
+
+	/** @test */
+	public function test_post_author_when_inserting_a_new_post()
+	{
+
+		$example_model = new \MUBase\Core\Models\Posts\Example();
+		$example_model->title = rand_str();
+		$example_model->author = $this->author->ID;
+		$post_id = $example_model->save();
+
+		$post_to_match = get_post($post_id);
+		$this->assertEquals($example_model->author, $post_to_match->post_author);
 	}
 
 
