@@ -46,6 +46,43 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertCount(0, $post_byID);
 	}
 
+	public function test_get_latest_scope_in_proper_order()
+	{
+
+		$post_1 = $this->factory->post->create_and_get(
+			$this->merge_with_common_args([
+				'post_date' => strftime('%Y-%m-%d %H:%M:%S', strtotime('-10 day'))
+			])
+		);
+
+		$post_3 = $this->factory->post->create_and_get(
+			$this->merge_with_common_args([
+				'post_date' => strftime('%Y-%m-%d %H:%M:%S', strtotime('-5 day'))
+			])
+		);
+
+		$post_2 = $this->factory->post->create_and_get(
+			$this->merge_with_common_args([
+				'post_date' => strftime('%Y-%m-%d %H:%M:%S', strtotime('-7 day'))
+			])
+		);
+
+		$latest = $this->exampleModel->latest(3);
+		$this->assertEquals([$post_3, $post_2, $post_1], $latest);
+
+		$post_4 = $this->factory->post->create_and_get(
+			$this->merge_with_common_args([
+				'post_date' => strftime('%Y-%m-%d %H:%M:%S', strtotime('-3 day'))
+			])
+		);
+
+		$latest = $this->exampleModel->latest(4);
+		$this->assertEquals([$post_4, $post_3, $post_2, $post_1], $latest);
+
+		$latest = $this->exampleModel->latest(3);
+		$this->assertEquals([$post_4, $post_3, $post_2], $latest);
+	}
+
 	public function test_get_latest_scope_with_pagination()
 	{
 		$posts = $this->factory->post->create_many(
