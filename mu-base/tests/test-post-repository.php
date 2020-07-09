@@ -201,7 +201,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 	public function test_custom_properties_when_editing_a_post()
 	{
 		$this->exampleModel->title = rand_str();
-		$this->exampleModel->save(); // Insert post
+		$post_id_inserting = $this->exampleModel->save(); // Insert post
 
 		$this->exampleModel->title = $new_title = 'New title';
 		$this->exampleModel->content = $new_content = 'New content';
@@ -209,9 +209,10 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->exampleModel->author = $new_author = $this->author->ID;
 		$this->exampleModel->status = $new_status = 'draft';
 
-		$post_id = $this->exampleModel->save(); // Update post
+		$post_id_updating = $this->exampleModel->save(); // Update post
+		$this->assertEquals($post_id_inserting, $post_id_updating);
 
-		$post_to_match = get_post($post_id);
+		$post_to_match = get_post($post_id_updating);
 		$this->assertEquals($new_title, $post_to_match->post_title);
 		$this->assertEquals($new_content, $post_to_match->post_content);
 		$this->assertEquals($new_date, $post_to_match->post_date);
