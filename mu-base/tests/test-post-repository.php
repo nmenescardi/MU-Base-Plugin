@@ -222,6 +222,29 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertEquals($example_model->date, $post_to_match->post_date);
 	}
 
+	/** @test */
+	public function test_custom_properties_when_editing_a_post()
+	{
+		$example_model = new ExamplePostModel();
+		$example_model->title = rand_str();
+		$example_model->save(); // Insert post
+
+		$example_model->title = $new_title = 'New title';
+		$example_model->content = $new_content = 'New content';
+		$example_model->date = $new_date = strftime('%Y-%m-%d %H:%M:%S', strtotime('-1 day'));
+		$example_model->author = $new_author = $this->author->ID;
+		$example_model->status = $new_status = 'draft';
+
+		$post_id = $example_model->save(); // Update post
+
+		$post_to_match = get_post($post_id);
+		$this->assertEquals($new_title, $post_to_match->post_title);
+		$this->assertEquals($new_content, $post_to_match->post_content);
+		$this->assertEquals($new_date, $post_to_match->post_date);
+		$this->assertEquals($new_author, $post_to_match->post_author);
+		$this->assertEquals($new_status, $post_to_match->post_status);
+	}
+
 
 	public function merge_with_common_args($args = [])
 	{
