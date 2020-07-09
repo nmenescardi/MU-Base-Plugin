@@ -10,30 +10,24 @@ class PostRepositoryTest extends WP_UnitTestCase
 		parent::setUp();
 
 		$this->author = $this->factory->user->create_and_get(array('role' => 'editor'));
+
+		$this->exampleModel = new ExamplePostModel();
 	}
 
-	/** @test */
-	public function get_all_scope()
+	public function test_get_all_scope()
 	{
-
-		$example_model = new ExamplePostModel();
-
 		$posts = $this->factory->post->create_many(
 			25,
 			$this->merge_with_common_args()
 		);
 
-		$all = $example_model->all();
+		$all = $this->exampleModel->all();
 
 		$this->assertCount(25, $all);
 	}
 
-	/** @test */
-	public function get_byID_scope()
+	public function test_get_byID_scope()
 	{
-
-		$example_model = new ExamplePostModel();
-
 		$new_post_ids = $this->factory->post->create_many(
 			5,
 			$this->merge_with_common_args()
@@ -41,37 +35,31 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$some_id = $new_post_ids[array_rand($new_post_ids)]; // Grab any ID
 
-		$post_byID = $example_model->byID($some_id);
+		$post_byID = $this->exampleModel->byID($some_id);
 
 		$this->assertCount(1, $post_byID);
 
 
 		$ridiculous_large_id = 9999999999;
-		$post_byID = $example_model->byID($ridiculous_large_id);
+		$post_byID = $this->exampleModel->byID($ridiculous_large_id);
 
 		$this->assertCount(0, $post_byID);
 	}
 
-	/** @test */
-	public function get_latest_scope_with_pagination()
+	public function test_get_latest_scope_with_pagination()
 	{
-		$example_model = new ExamplePostModel();
-
 		$posts = $this->factory->post->create_many(
 			25,
 			$this->merge_with_common_args()
 		);
 
-		$latest = $example_model->latest(20);
+		$latest = $this->exampleModel->latest(20);
 
 		$this->assertCount(20, $latest);
 	}
 
-	/** @test */
-	public function get_by_author_scope()
+	public function test_get_by_author_scope()
 	{
-		$example_model = new ExamplePostModel();
-
 		$this->factory->post->create_many(
 			2,
 			$this->merge_with_common_args(['post_author' => 1])
@@ -88,16 +76,16 @@ class PostRepositoryTest extends WP_UnitTestCase
 		);
 
 		// Author User ID 1
-		$this->assertCount(2, $example_model->byAuthor(1));
+		$this->assertCount(2, $this->exampleModel->byAuthor(1));
 
 		// Author User ID 2
-		$this->assertCount(3, $example_model->byAuthor(2));
+		$this->assertCount(3, $this->exampleModel->byAuthor(2));
 
 		// Author User ID 3
-		$this->assertCount(5, $example_model->byAuthor(3));
+		$this->assertCount(5, $this->exampleModel->byAuthor(3));
 
 		// Posts of Authors 1 and 3
-		$this->assertCount(7, $example_model->byAuthor([1, 3]));
+		$this->assertCount(7, $this->exampleModel->byAuthor([1, 3]));
 
 
 		// Another post type -> should not be included on the Example CPT query
@@ -107,12 +95,11 @@ class PostRepositoryTest extends WP_UnitTestCase
 		);
 
 		// Still same results
-		$this->assertCount(5, $example_model->byAuthor(3));
-		$this->assertCount(7, $example_model->byAuthor([1, 3]));
+		$this->assertCount(5, $this->exampleModel->byAuthor(3));
+		$this->assertCount(7, $this->exampleModel->byAuthor([1, 3]));
 	}
 
-	/** @test */
-	public function get_related_scope()
+	public function test_get_related_scope()
 	{
 		$new_term = 'Term To Match';
 		$taxonomy = 'base-example';
@@ -122,9 +109,8 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$taxonomy
 		);
 
-		$example_model = new ExamplePostModel();
-		$example_model->title = 'Post To relate';
-		$new_post_id = $example_model->save();
+		$this->exampleModel->title = 'Post To relate';
+		$new_post_id = $this->exampleModel->save();
 
 		$amount_of_posts_to_match = 2;
 		$related_posts = $this->factory->post->create_many(
@@ -141,41 +127,36 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$this->merge_with_common_args()
 		);
 
-		$related_posts = $example_model->related($taxonomy);
+		$related_posts = $this->exampleModel->related($taxonomy);
 
 		$this->assertCount($amount_of_posts_to_match, $related_posts);
 	}
 
-	/** @test */
 	public function test_getting_proper_id_after_inserting_a_new_post()
 	{
-		$example_model = new ExamplePostModel();
-		$example_model->title = 'New Post';
-		$post_id = $example_model->save();
+		$this->exampleModel->title = 'New Post';
+		$post_id = $this->exampleModel->save();
 
 		$this->assertTrue(is_numeric($post_id));
 		$this->assertTrue($post_id > 0);
 	}
 
-	/** @test */
 	public function test_matching_properties_after_inserting_a_new_post()
 	{
-		$example_model = new ExamplePostModel();
-		$example_model->title = rand_str();
-		$example_model->content = rand_str();
-		$post_id = $example_model->save();
+		$this->exampleModel->title = rand_str();
+		$this->exampleModel->content = rand_str();
+		$post_id = $this->exampleModel->save();
 
 		$post_to_match = get_post($post_id);
 
-		$this->assertEquals($example_model->title, $post_to_match->post_title);
-		$this->assertEquals($example_model->content, $post_to_match->post_content);
-		$this->assertEquals($example_model->ID, $post_to_match->ID);
-		$this->assertEquals($example_model->status, $post_to_match->post_status);
-		$this->assertEquals($example_model->author, $post_to_match->post_author);
-		$this->assertEquals($example_model->date, $post_to_match->post_date);
+		$this->assertEquals($this->exampleModel->title, $post_to_match->post_title);
+		$this->assertEquals($this->exampleModel->content, $post_to_match->post_content);
+		$this->assertEquals($this->exampleModel->ID, $post_to_match->ID);
+		$this->assertEquals($this->exampleModel->status, $post_to_match->post_status);
+		$this->assertEquals($this->exampleModel->author, $post_to_match->post_author);
+		$this->assertEquals($this->exampleModel->date, $post_to_match->post_date);
 	}
 
-	/** @test */
 	public function test_post_status_when_inserting_a_new_post()
 	{
 		$statuses = [
@@ -184,58 +165,51 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		foreach ($statuses as $status) {
 
-			$example_model = new ExamplePostModel();
-			$example_model->title = rand_str();
-			$example_model->status = $status;
-			$post_id = $example_model->save();
+			$exampleModel = new ExamplePostModel();
+			$exampleModel->title = rand_str();
+			$exampleModel->status = $status;
+			$post_id = $exampleModel->save();
 
 			$post_to_match = get_post($post_id);
-			$this->assertEquals($example_model->status, $post_to_match->post_status);
+			$this->assertEquals($exampleModel->status, $post_to_match->post_status);
 			$this->assertEquals($status, get_post_status($post_id));
 		}
 	}
 
-	/** @test */
 	public function test_post_author_when_inserting_a_new_post()
 	{
-
-		$example_model = new ExamplePostModel();
-		$example_model->title = rand_str();
-		$example_model->author = $this->author->ID;
-		$post_id = $example_model->save();
+		$this->exampleModel->title = rand_str();
+		$this->exampleModel->author = $this->author->ID;
+		$post_id = $this->exampleModel->save();
 
 		$post_to_match = get_post($post_id);
-		$this->assertEquals($example_model->author, $post_to_match->post_author);
+		$this->assertEquals($this->exampleModel->author, $post_to_match->post_author);
 	}
 
-	/** @test */
 	public function test_custom_past_date_when_inserting_a_new_post()
 	{
 		$past_date = strftime('%Y-%m-%d %H:%M:%S', strtotime('-1 day'));
 
-		$example_model = new ExamplePostModel();
-		$example_model->title = rand_str();
-		$example_model->date = $past_date;
-		$post_id = $example_model->save();
+		$this->exampleModel->title = rand_str();
+		$this->exampleModel->date = $past_date;
+		$post_id = $this->exampleModel->save();
 
 		$post_to_match = get_post($post_id);
-		$this->assertEquals($example_model->date, $post_to_match->post_date);
+		$this->assertEquals($this->exampleModel->date, $post_to_match->post_date);
 	}
 
-	/** @test */
 	public function test_custom_properties_when_editing_a_post()
 	{
-		$example_model = new ExamplePostModel();
-		$example_model->title = rand_str();
-		$example_model->save(); // Insert post
+		$this->exampleModel->title = rand_str();
+		$this->exampleModel->save(); // Insert post
 
-		$example_model->title = $new_title = 'New title';
-		$example_model->content = $new_content = 'New content';
-		$example_model->date = $new_date = strftime('%Y-%m-%d %H:%M:%S', strtotime('-1 day'));
-		$example_model->author = $new_author = $this->author->ID;
-		$example_model->status = $new_status = 'draft';
+		$this->exampleModel->title = $new_title = 'New title';
+		$this->exampleModel->content = $new_content = 'New content';
+		$this->exampleModel->date = $new_date = strftime('%Y-%m-%d %H:%M:%S', strtotime('-1 day'));
+		$this->exampleModel->author = $new_author = $this->author->ID;
+		$this->exampleModel->status = $new_status = 'draft';
 
-		$post_id = $example_model->save(); // Update post
+		$post_id = $this->exampleModel->save(); // Update post
 
 		$post_to_match = get_post($post_id);
 		$this->assertEquals($new_title, $post_to_match->post_title);
