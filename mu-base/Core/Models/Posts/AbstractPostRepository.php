@@ -54,9 +54,18 @@ abstract class AbstractPostRepository
     return $post_id;
   }
 
-  public function remove(\WP_Post $post, $force = false)
+  /**
+   * @param WP_Post|int $post 
+   * @param boolean $force
+   * @return WP_Post|false|null — Post data on success, false or null on failure.
+   */
+  public function delete($post = null, $force = false)
   {
-    wp_delete_post($post->ID, $force);
+    $post_id = $post instanceof \WP_Post ? $post->ID : $post;
+
+    if(!$post_id && isset($this->ID)) $post_id = $this->ID;
+
+    return wp_delete_post($post_id, $force);
   }
 
   protected function find(array $args)
