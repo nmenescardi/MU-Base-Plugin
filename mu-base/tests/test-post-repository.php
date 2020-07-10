@@ -303,8 +303,21 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$this->assertCount(1, $this->exampleModel->all());
 		
-		// Remove with no Arguments
 		$this->exampleModel->delete($post_id);
+		$this->assertCount(0, $this->exampleModel->all());
+	}
+
+	public function test_deleting_a_new_post_passing_wp_post_object_as_arg()
+	{
+		$post_id = $this->factory->post->create(
+			$this->merge_with_common_args()
+		);
+
+		$all_posts = $this->exampleModel->all();
+
+		$this->assertCount(1, $all_posts);
+		
+		$this->exampleModel->delete($all_posts[0]);
 		$this->assertCount(0, $this->exampleModel->all());
 	}
 
