@@ -284,6 +284,16 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertEquals($new_status, $post_to_match->post_status);
 	}
 
+	public function test_deleting_a_new_post()
+	{
+		$this->exampleModel->title = 'New Post';
+		$this->exampleModel->save();
+		$this->assertCount(1, $this->exampleModel->all());
+		
+		// Remove with no Arguments
+		$this->exampleModel->delete();
+		$this->assertCount(0, $this->exampleModel->all());
+	}
 
 	public function merge_with_common_args($args = [])
 	{
