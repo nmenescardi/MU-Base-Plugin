@@ -2,14 +2,15 @@
 
 namespace MUBase\Core\Models\Posts;
 
-use MUBase\Core\Models\Scopes\{All, ScopeInterface, HasScopeTrait};
+use MUBase\Core\Models\Scopes\HasScopeTrait as HasScope;
+use MUBase\Core\Models\Meta\HasMetaTrait as HasMeta;
 
 use function MUBase\Core\Helpers\app;
 
 abstract class AbstractPostRepository
 {
 
-  use HasScopeTrait;
+  use HasScope, HasMeta;
 
   abstract public static function key(): string;
 
