@@ -1,12 +1,9 @@
 <?php
 
-namespace MUBase\Core\Models\Scopes\Query;
+namespace MUBase\Core\Models\Scopes;
 
 abstract class AbstractScope
 {
-
-  abstract protected function concreteArgs(): array;
-
   protected $rawParams;
 
   protected $model;
@@ -27,18 +24,5 @@ abstract class AbstractScope
    */
   protected function filterParams()
   {
-  }
-
-  public function getArgs(): array
-  {
-    return array_merge(
-      [
-        'posts_per_page'  => 200,
-        'orderby'         => 'date',
-        'order'           => 'ASC',
-        'post_status'     => 'publish',
-      ],
-      $this->concreteArgs()
-    );
   }
 }

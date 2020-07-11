@@ -1,8 +1,8 @@
 <?php
 
-namespace MUBase\Core\Models\Scopes\Query;
+namespace MUBase\Core\Models\Scopes\Queries;
 
-class All extends AbstractScope
+class All extends AbstractQueryScope
 {
 
   protected function concreteArgs(): array

@@ -8,7 +8,7 @@ class Example extends AbstractPostRepository
 {
 
   protected $concreteQueryScopes = [
-    'related'  => \MUBase\Core\Models\Scopes\Query\Related::class,
+    'related'  => \MUBase\Core\Models\Scopes\Queries\Related::class,
   ];
 
   public static function key(): string

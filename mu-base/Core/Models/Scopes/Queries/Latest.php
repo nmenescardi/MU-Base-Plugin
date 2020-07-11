@@ -1,10 +1,9 @@
 <?php
 
-namespace MUBase\Core\Models\Scopes\Query;
+namespace MUBase\Core\Models\Scopes\Queries;
 
-class Latest extends AbstractScope
+class Latest extends AbstractQueryScope
 {
-
 
   protected function filterParams()
   {

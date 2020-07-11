@@ -1,8 +1,8 @@
 <?php
 
-namespace MUBase\Core\Models\Scopes\Query;
+namespace MUBase\Core\Models\Scopes\Queries;
 
-class ByID extends AbstractScope
+class ByID extends AbstractQueryScope
 {
 
   protected function filterParams()
