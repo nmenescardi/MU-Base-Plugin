@@ -14,6 +14,13 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->exampleModel = new ExamplePostModel();
 	}
 
+	public function test_getting_an_exception_when_scope_is_not_defined()
+	{
+		$this->expectException(\BadMethodCallException::class);
+
+		$this->exampleModel->notValidScope();
+	}
+
 	public function test_get_all_scope()
 	{
 		$posts = $this->factory->post->create_many(
