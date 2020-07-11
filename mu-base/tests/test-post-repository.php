@@ -1,6 +1,6 @@
 <?php
 
-use MUBase\Core\Models\Posts\Example as ExamplePostModel;
+use MUBase\Core\Models\Posts\Example as ExampleModel;
 
 class PostRepositoryTest extends WP_UnitTestCase
 {
@@ -11,7 +11,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$this->author = $this->factory->user->create_and_get(array('role' => 'editor'));
 
-		$this->exampleModel = new ExamplePostModel();
+		$this->exampleModel = new ExampleModel();
 	}
 
 	public function test_getting_an_exception_when_scope_is_not_defined()
@@ -21,6 +21,13 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->exampleModel->notValidScope();
 	}
 
+	public function test_getting_an_exception_when_static_scope_is_not_defined()
+	{
+		$this->expectException(\BadMethodCallException::class);
+
+		ExampleModel::notValidScope();
+	}
+
 	public function test_get_all_scope()
 	{
 		$posts = $this->factory->post->create_many(
@@ -28,7 +35,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$this->merge_with_common_args()
 		);
 
-		$all = $this->exampleModel->all();
+		$all = ExampleModel::all();
 
 		$this->assertCount(25, $all);
 	}
@@ -42,13 +49,13 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$some_id = $new_post_ids[array_rand($new_post_ids)]; // Grab any ID
 
-		$post_byID = $this->exampleModel->find($some_id);
+		$post_byID = ExampleModel::find($some_id);
 
 		$this->assertCount(1, $post_byID);
 
 
 		$ridiculous_large_id = 9999999999;
-		$post_byID = $this->exampleModel->find($ridiculous_large_id);
+		$post_byID = ExampleModel::find($ridiculous_large_id);
 
 		$this->assertCount(0, $post_byID);
 	}
@@ -74,7 +81,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 			])
 		);
 
-		$latest = $this->exampleModel->latest(3);
+		$latest = ExampleModel::latest(3);
 		$this->assertEquals([$post_3, $post_2, $post_1], $latest);
 
 		$post_4 = $this->factory->post->create_and_get(
@@ -83,10 +90,10 @@ class PostRepositoryTest extends WP_UnitTestCase
 			])
 		);
 
-		$latest = $this->exampleModel->latest(4);
+		$latest = ExampleModel::latest(4);
 		$this->assertEquals([$post_4, $post_3, $post_2, $post_1], $latest);
 
-		$latest = $this->exampleModel->latest(3);
+		$latest = ExampleModel::latest(3);
 		$this->assertEquals([$post_4, $post_3, $post_2], $latest);
 	}
 
@@ -97,7 +104,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$this->merge_with_common_args()
 		);
 
-		$latest = $this->exampleModel->latest(20);
+		$latest = ExampleModel::latest(20);
 
 		$this->assertCount(20, $latest);
 	}
@@ -120,16 +127,16 @@ class PostRepositoryTest extends WP_UnitTestCase
 		);
 
 		// Author User ID 1
-		$this->assertCount(2, $this->exampleModel->byAuthor(1));
+		$this->assertCount(2, ExampleModel::byAuthor(1));
 
 		// Author User ID 2
-		$this->assertCount(3, $this->exampleModel->byAuthor(2));
+		$this->assertCount(3, ExampleModel::byAuthor(2));
 
 		// Author User ID 3
-		$this->assertCount(5, $this->exampleModel->byAuthor(3));
+		$this->assertCount(5, ExampleModel::byAuthor(3));
 
 		// Posts of Authors 1 and 3
-		$this->assertCount(7, $this->exampleModel->byAuthor([1, 3]));
+		$this->assertCount(7, ExampleModel::byAuthor([1, 3]));
 
 
 		// Another post type -> should not be included on the Example CPT query
@@ -139,8 +146,8 @@ class PostRepositoryTest extends WP_UnitTestCase
 		);
 
 		// Still same results
-		$this->assertCount(5, $this->exampleModel->byAuthor(3));
-		$this->assertCount(7, $this->exampleModel->byAuthor([1, 3]));
+		$this->assertCount(5, ExampleModel::byAuthor(3));
+		$this->assertCount(7, ExampleModel::byAuthor([1, 3]));
 	}
 
 	public function test_get_related_scope()
@@ -229,7 +236,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		foreach ($statuses as $status) {
 
-			$exampleModel = new ExamplePostModel();
+			$exampleModel = new ExampleModel();
 			$exampleModel->title = rand_str();
 			$exampleModel->status = $status;
 			$post_id = $exampleModel->save();
@@ -315,11 +322,11 @@ class PostRepositoryTest extends WP_UnitTestCase
 	{
 		$this->exampleModel->title = 'New Post';
 		$this->exampleModel->save();
-		$this->assertCount(1, $this->exampleModel->all());
+		$this->assertCount(1, ExampleModel::all());
 
 		// Remove with no Arguments
 		$this->exampleModel->delete();
-		$this->assertCount(0, $this->exampleModel->all());
+		$this->assertCount(0, ExampleModel::all());
 	}
 
 	public function test_deleting_a_new_post_passing_post_id_as_arg()
@@ -328,10 +335,10 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$this->merge_with_common_args()
 		);
 
-		$this->assertCount(1, $this->exampleModel->all());
+		$this->assertCount(1, ExampleModel::all());
 
 		$this->exampleModel->delete($post_id);
-		$this->assertCount(0, $this->exampleModel->all());
+		$this->assertCount(0, ExampleModel::all());
 	}
 
 	public function test_deleting_a_new_post_passing_wp_post_object_as_arg()
@@ -340,12 +347,12 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$this->merge_with_common_args()
 		);
 
-		$all_posts = $this->exampleModel->all();
+		$all_posts = ExampleModel::all();
 
 		$this->assertCount(1, $all_posts);
 
 		$this->exampleModel->delete($all_posts[0]);
-		$this->assertCount(0, $this->exampleModel->all());
+		$this->assertCount(0, ExampleModel::all());
 	}
 
 	public function merge_with_common_args($args = [])

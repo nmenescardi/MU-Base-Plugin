@@ -11,7 +11,7 @@ trait HasScopeTrait
 
   protected function initScopes()
   {
-    $this->queryScopes = array_merge(
+    $this->queryStaticScopes = array_merge(
       [
         'all'         => \MUBase\Core\Models\Scopes\Queries\All::class,
         'latest'      => \MUBase\Core\Models\Scopes\Queries\Latest::class,
@@ -19,6 +19,11 @@ trait HasScopeTrait
         'byID'        => \MUBase\Core\Models\Scopes\Queries\ByID::class,
         'find'        => \MUBase\Core\Models\Scopes\Queries\ByID::class, // Alias
       ],
+      $this->concreteQueryStaticScopes ?? []
+    );
+
+    $this->queryScopes = array_merge(
+      [],
       $this->concreteQueryScopes ?? []
     );
 
@@ -48,11 +53,23 @@ trait HasScopeTrait
     throw new \BadMethodCallException;
   }
 
+  public static function __callStatic($method, $args)
+  {
+    $model = new static();
+
+    // Query Static Scopes
+    if (isset($model->queryStaticScopes[$method]))
+      return $model->handleQueryScope(
+        new $model->queryStaticScopes[$method]($args, $model)
+      );
+
+    // Scope Not found
+    throw new \BadMethodCallException;
+  }
+
   protected function handleQueryScope(AbstractQueryScope $scope)
   {
-    $args = $scope->getArgs();
-
-    return $this->performQuery($args);
+    return $this->performQuery($scope->getArgs());
   }
 
   protected function handleCheckScope(AbstractCheckScope $scope)
