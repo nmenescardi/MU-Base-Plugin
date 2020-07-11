@@ -17,6 +17,7 @@ trait HasScopeTrait
         'latest'      => \MUBase\Core\Models\Scopes\Queries\Latest::class,
         'byAuthor'    => \MUBase\Core\Models\Scopes\Queries\ByAuthor::class,
         'byID'        => \MUBase\Core\Models\Scopes\Queries\ByID::class,
+        'find'        => \MUBase\Core\Models\Scopes\Queries\ByID::class, // Alias
       ],
       $this->concreteQueryScopes ?? []
     );
@@ -51,7 +52,7 @@ trait HasScopeTrait
   {
     $args = $scope->getArgs();
 
-    return $this->find($args);
+    return $this->performQuery($args);
   }
 
   protected function handleCheckScope(AbstractCheckScope $scope)

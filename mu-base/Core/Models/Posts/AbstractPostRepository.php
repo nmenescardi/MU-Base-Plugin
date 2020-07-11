@@ -68,7 +68,7 @@ abstract class AbstractPostRepository
     return wp_delete_post($post_id, $force);
   }
 
-  protected function find(array $args)
+  protected function performQuery(array $args)
   {
     $args = array_merge([
       'post_type' => static::key(),
@@ -86,7 +86,7 @@ abstract class AbstractPostRepository
       'posts_per_page' => 1
     ]);
 
-    $post = $this->find($args);
+    $post = $this->performQuery($args);
 
     return !empty($post[0]) ? $post[0] : null;
   }

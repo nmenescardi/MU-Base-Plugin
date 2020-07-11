@@ -42,13 +42,13 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$some_id = $new_post_ids[array_rand($new_post_ids)]; // Grab any ID
 
-		$post_byID = $this->exampleModel->byID($some_id);
+		$post_byID = $this->exampleModel->find($some_id);
 
 		$this->assertCount(1, $post_byID);
 
 
 		$ridiculous_large_id = 9999999999;
-		$post_byID = $this->exampleModel->byID($ridiculous_large_id);
+		$post_byID = $this->exampleModel->find($ridiculous_large_id);
 
 		$this->assertCount(0, $post_byID);
 	}
