@@ -180,6 +180,15 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertTrue($is_same_post_type);
 	}
 
+	public function test_two_posts_are_NOT_the_same_post_type()
+	{
+		$page_id = $this->factory->post->create(['post_type' => 'page']);
+
+		$is_NOT_same_post_type = $this->exampleModel->isSameType($page_id);
+
+		$this->assertFalse($is_NOT_same_post_type);
+	}
+
 	public function test_getting_proper_id_after_inserting_a_new_post()
 	{
 		$this->exampleModel->title = 'New Post';
