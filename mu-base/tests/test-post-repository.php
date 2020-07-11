@@ -289,7 +289,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->exampleModel->title = 'New Post';
 		$this->exampleModel->save();
 		$this->assertCount(1, $this->exampleModel->all());
-		
+
 		// Remove with no Arguments
 		$this->exampleModel->delete();
 		$this->assertCount(0, $this->exampleModel->all());
@@ -302,7 +302,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 		);
 
 		$this->assertCount(1, $this->exampleModel->all());
-		
+
 		$this->exampleModel->delete($post_id);
 		$this->assertCount(0, $this->exampleModel->all());
 	}
@@ -316,7 +316,7 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$all_posts = $this->exampleModel->all();
 
 		$this->assertCount(1, $all_posts);
-		
+
 		$this->exampleModel->delete($all_posts[0]);
 		$this->assertCount(0, $this->exampleModel->all());
 	}

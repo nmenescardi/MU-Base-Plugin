@@ -7,8 +7,8 @@ use MUBase\Core\PostTypes\CptExample;
 class Example extends AbstractPostRepository
 {
 
-  protected $concrete_scopes = [
-    'related'  => \MUBase\Core\Models\Scopes\Related::class,
+  protected $concreteQueryScopes = [
+    'related'  => \MUBase\Core\Models\Scopes\Query\Related::class,
   ];
 
   public static function key(): string

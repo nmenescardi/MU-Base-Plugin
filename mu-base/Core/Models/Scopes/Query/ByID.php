@@ -1,14 +1,13 @@
 <?php
 
-namespace MUBase\Core\Models\Scopes;
+namespace MUBase\Core\Models\Scopes\Query;
 
-class Latest extends AbstractScope
+class ByID extends AbstractScope
 {
-
 
   protected function filterParams()
   {
-    $this->postsPerPage =
+    $this->postID =
       (is_array($this->rawParams) && isset($this->rawParams[0]))
       ? $this->rawParams[0]
       : false;
@@ -17,9 +16,8 @@ class Latest extends AbstractScope
   protected function concreteArgs(): array
   {
     return [
-      'posts_per_page'  => $this->postsPerPage ?: 15,
-      'orderby'         => 'date',
-      'order'           => 'DESC',
+      'p'  => $this->postID,
+      'posts_per_page'  => 1,
     ];
   }
 }

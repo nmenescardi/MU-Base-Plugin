@@ -1,6 +1,6 @@
 <?php
 
-namespace MUBase\Core\Models\Scopes;
+namespace MUBase\Core\Models\Scopes\Query;
 
 class ByAuthor extends AbstractScope
 {

@@ -63,7 +63,7 @@ abstract class AbstractPostRepository
   {
     $post_id = $post instanceof \WP_Post ? $post->ID : $post;
 
-    if(!$post_id && isset($this->ID)) $post_id = $this->ID;
+    if (!$post_id && isset($this->ID)) $post_id = $this->ID;
 
     return wp_delete_post($post_id, $force);
   }

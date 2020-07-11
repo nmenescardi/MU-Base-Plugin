@@ -4,30 +4,28 @@ namespace MUBase\Core\Models\Scopes;
 
 trait HasScopeTrait
 {
-
   protected $scopes;
-
 
   protected function initScopes()
   {
-    $this->scopes = array_merge(
+    $this->queryScopes = array_merge(
       [
-        'all'         => \MUBase\Core\Models\Scopes\All::class,
-        'latest'      => \MUBase\Core\Models\Scopes\Latest::class,
-        'byAuthor'    => \MUBase\Core\Models\Scopes\ByAuthor::class,
-        'byID'        => \MUBase\Core\Models\Scopes\ByID::class,
+        'all'         => \MUBase\Core\Models\Scopes\Query\All::class,
+        'latest'      => \MUBase\Core\Models\Scopes\Query\Latest::class,
+        'byAuthor'    => \MUBase\Core\Models\Scopes\Query\ByAuthor::class,
+        'byID'        => \MUBase\Core\Models\Scopes\Query\ByID::class,
       ],
-      $this->concrete_scopes ?? []
+      $this->concreteQueryScopes ?? []
     );
   }
 
   public function __call($method, $args)
   {
-    if (!isset($this->scopes[$method])) throw new \BadMethodCallException;
+    if (!isset($this->queryScopes[$method])) throw new \BadMethodCallException;
 
-    $scope = new $this->scopes[$method]($args, $this);
+    $scope = new $this->queryScopes[$method]($args, $this);
 
-    if (!$scope instanceof AbstractScope) throw new \BadMethodCallException;
+    if (!$scope instanceof Query\AbstractScope) throw new \BadMethodCallException;
 
     $args = ($scope)->getArgs();
 
