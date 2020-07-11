@@ -169,6 +169,17 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertCount($amount_of_posts_to_match, $related_posts);
 	}
 
+	public function test_two_posts_are_same_post_type__check_scope_evaluation()
+	{
+		$post_id = $this->factory->post->create(
+			$this->merge_with_common_args()
+		);
+
+		$is_same_post_type = $this->exampleModel->isSameType($post_id);
+
+		$this->assertTrue($is_same_post_type);
+	}
+
 	public function test_getting_proper_id_after_inserting_a_new_post()
 	{
 		$this->exampleModel->title = 'New Post';
