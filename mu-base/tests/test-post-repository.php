@@ -355,6 +355,34 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertCount(0, ExampleModel::all());
 	}
 
+	public function test_saving_meta_data_using_crud_methods()
+	{
+		$this->exampleModel->title = 'New Post';
+		$post_id = $this->exampleModel->save();
+
+		$metaKey = 'some_meta_key';
+		$metaValue = 'The meta value';
+
+		$this->assertInternalType(
+			'integer',
+			$metaID = $this->exampleModel->saveMeta($metaKey, $metaValue)
+		);
+
+		$valueToCheck = get_post_meta(
+			$post_id,
+			$metaKey,
+			true
+		);
+		$this->assertEquals($metaValue, $valueToCheck);
+
+		// Check getting proper data by querying the post meta by ID
+		$postMetaObj = get_post_meta_by_id($metaID);
+		$this->assertEquals($post_id, $postMetaObj->post_id);
+		$this->assertEquals($metaKey, $postMetaObj->meta_key);
+		$this->assertEquals($metaValue, $postMetaObj->meta_value);
+	}
+
+
 	public function merge_with_common_args($args = [])
 	{
 		return array_merge(
