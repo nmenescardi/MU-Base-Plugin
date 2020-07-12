@@ -421,6 +421,41 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertFalse($this->exampleModel->deleteMeta('Some_Dummy_Meta'));
 	}
 
+	public function test_getting_meta_data_using_crud_methods()
+	{
+		$this->exampleModel->title = 'New Post';
+		$post_id = $this->exampleModel->save();
+
+		$metaKey = 'some_meta_key';
+		$metaValue = 'Value to retrieve and compare';
+
+		$metaID = $this->exampleModel->saveMeta($metaKey, $metaValue);
+
+		// Test getting same value
+		$this->assertEquals(
+			$this->exampleModel->getMeta($metaKey, true),
+			$metaValue
+		);
+
+		// same value as array
+		$this->assertEquals(
+			$this->exampleModel->getMeta($metaKey),
+			array($metaValue)
+		);
+
+		// Test getting empty after deleting
+		$this->assertTrue($this->exampleModel->deleteMeta($metaKey));
+		$this->assertEmpty($this->exampleModel->getMeta($metaKey));
+
+
+		// Test getting the default value back when it's empty
+		$defaultValue = 'Value to receive';
+		$this->assertEquals(
+			$this->exampleModel->getMeta($metaKey, true, $defaultValue),
+			$defaultValue
+		);
+	}
+
 
 	public function merge_with_common_args($args = [])
 	{
