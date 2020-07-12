@@ -26,7 +26,7 @@ trait HasMetaTrait
     );
   }
 
-  public function getMeta(string $key, $default = false, bool $single = false)
+  public function getMeta(string $key, bool $single = false, $default = false)
   {
     $metaValue = \get_metadata(
       $this->meta_type,
@@ -35,7 +35,10 @@ trait HasMetaTrait
       $single
     );
 
-    return $metaValue ?: $default;
+    return
+      !$metaValue && $default
+      ? $default
+      : $metaValue;
   }
 
   public function deleteMeta(string $key, $value = '', bool $deleteAll = false)
