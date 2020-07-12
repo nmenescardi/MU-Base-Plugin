@@ -401,6 +401,26 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertEquals($secondMetaValue, $valueToCheck);
 	}
 
+	public function test_deleting_meta_data_using_crud_methods()
+	{
+		$this->exampleModel->title = 'New Post';
+		$post_id = $this->exampleModel->save();
+
+		$metaKey = 'some_meta_key';
+		$metaValue = 'Value to Remove';
+
+		$metaID = $this->exampleModel->saveMeta($metaKey, $metaValue);
+		$this->assertInternalType('integer', $metaID);
+		$this->assertTrue($metaID > 0);
+
+		// Assert Deleting goes well
+		$this->assertTrue($this->exampleModel->deleteMeta($metaKey));
+		$this->assertEmpty(get_post_meta($post_id, $metaKey, true));
+
+		// Deleting return false when the key wasn't found or it was an issue
+		$this->assertFalse($this->exampleModel->deleteMeta('Some_Dummy_Meta'));
+	}
+
 
 	public function merge_with_common_args($args = [])
 	{
