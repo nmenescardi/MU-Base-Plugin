@@ -2,8 +2,6 @@
 
 namespace MUBase\Core\Models\Posts;
 
-use MUBase\Core\PostTypes\CptExample;
-
 class Example extends AbstractPostRepository
 {
 
@@ -11,8 +9,8 @@ class Example extends AbstractPostRepository
     'related'  => \MUBase\Core\Models\Scopes\Queries\Related::class,
   ];
 
-  public static function key(): string
+  protected static function boundCPT(): string
   {
-    return CptExample::key();
+    return \MUBase\Core\PostTypes\CptExample::class;
   }
 }

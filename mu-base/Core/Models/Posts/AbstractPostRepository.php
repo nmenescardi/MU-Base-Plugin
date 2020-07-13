@@ -12,7 +12,7 @@ abstract class AbstractPostRepository
 
   use HasScope, HasMeta;
 
-  abstract public static function key(): string;
+  abstract protected static function boundCPT(): string;
 
   protected $properties;
 
@@ -28,6 +28,11 @@ abstract class AbstractPostRepository
     $this->initPropertiesMap();
 
     $this->initDefaultProps();
+  }
+
+  public static function key(): string
+  {
+    return static::boundCPT()::key();
   }
 
   public function save(array $custom_props = [])
