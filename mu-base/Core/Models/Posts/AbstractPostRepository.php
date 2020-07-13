@@ -40,7 +40,9 @@ abstract class AbstractPostRepository
     $properties = $this->mergeProperties($custom_props);
 
     if (isset($properties['ID']) && !$properties['ID'])
-      return wp_update_post($properties, true);
+      return $this->fillUpdatedPost(
+        wp_update_post($properties, true)
+      );
 
     return $this->fillUpdatedPost(
       wp_insert_post($properties, true)
