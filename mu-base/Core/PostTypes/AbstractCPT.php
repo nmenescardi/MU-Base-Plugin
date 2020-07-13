@@ -39,7 +39,7 @@ abstract class AbstractCPT
 
   public function registerPostMeta()
   {
-    foreach ($this->meta ?? [] as $key => $args) {
+    foreach (static::meta() ?? [] as $key => $args) {
 
       // Add Subtype
       $args = array_merge($args, ['object_subtype' => static::key()]);
