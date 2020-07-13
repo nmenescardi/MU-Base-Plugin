@@ -62,6 +62,19 @@ abstract class AbstractPostRepository
     return $post_id;
   }
 
+  protected function getMetaArgs(): array
+  {
+    $metaArgs = [];
+
+    foreach (static::boundCPT()::meta() as $metaKey => $args) {
+
+      if (isset($this->$metaKey))
+        $metaArgs[$metaKey] = $this->$metaKey;
+    }
+
+    return $metaArgs;
+  }
+
   /**
    * @param WP_Post|int $post 
    * @param boolean $force
@@ -146,6 +159,10 @@ abstract class AbstractPostRepository
         $result[$WP_prop] = $this->default_props[$WP_prop];
       }
     }
+
+    //Fill With Meta
+    if (!empty($metaArgs = $this->getMetaArgs()))
+      $result['meta_input'] = $metaArgs;
 
     return $result;
   }
