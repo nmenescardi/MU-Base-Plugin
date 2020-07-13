@@ -456,6 +456,23 @@ class PostRepositoryTest extends WP_UnitTestCase
 		);
 	}
 
+	public function test_saving_meta_data_as_properties()
+	{
+		$some_value = 'Some Value';
+
+		$this->exampleModel->title = 'New Post';
+		$this->exampleModel->meta_example_1 = $some_value;
+		$this->exampleModel->none_existing_meta = $some_value;
+		$post_id = $this->exampleModel->save();
+
+		$this->assertEquals(
+			$this->exampleModel->getMeta('meta_example_1', true),
+			$some_value
+		);
+
+		$this->assertEmpty($this->exampleModel->getMeta('meta_example_2', true));
+		$this->assertEmpty($this->exampleModel->getMeta('none_existing_meta', true));
+	}
 
 	public function merge_with_common_args($args = [])
 	{
