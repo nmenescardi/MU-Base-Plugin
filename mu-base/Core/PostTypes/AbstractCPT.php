@@ -12,10 +12,11 @@ abstract class AbstractCPT
 
   public function init()
   {
-    add_action('init', array($this, 'register'));
+    add_action('init', array($this, 'registerCPT'));
+    add_action('init', array($this, 'registerPostMeta'));
   }
 
-  public function register()
+  public function registerCPT()
   {
     $default_args = [
       'supports'      => [
@@ -34,5 +35,16 @@ abstract class AbstractCPT
       static::key(),
       $args
     );
+  }
+
+  public function registerPostMeta()
+  {
+    foreach ($this->meta ?? [] as $key => $args) {
+
+      // Add Subtype
+      $args = array_merge($args, ['object_subtype' => static::key()]);
+
+      register_meta('post', $key, $args);
+    }
   }
 }
