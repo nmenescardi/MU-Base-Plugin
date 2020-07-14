@@ -474,6 +474,20 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertEmpty($this->exampleModel->getMeta('none_existing_meta', true));
 	}
 
+	public function test_getting_meta_data_as_properties()
+	{
+		$this->exampleModel->title = 'New Post';
+		$post_id = $this->exampleModel->save();
+
+		$some_value = 'Some Value';
+		add_post_meta($post_id, 'meta_example_1', $some_value);
+
+		$this->assertEquals(
+			$this->exampleModel->meta_example_1, // Accessing as property
+			$some_value
+		);
+	}
+
 	public function merge_with_common_args($args = [])
 	{
 		return array_merge(
