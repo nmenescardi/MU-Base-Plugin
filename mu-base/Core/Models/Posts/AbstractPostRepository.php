@@ -75,6 +75,16 @@ abstract class AbstractPostRepository
     return $metaArgs;
   }
 
+  public function __get($property)
+  {
+    //TODO Refactor same loop
+    foreach (static::boundCPT()::meta() as $metaKey => $args) {
+
+      if ($property === $metaKey)
+        return $this->getMeta($metaKey, true);
+    }
+  }
+
   /**
    * @param WP_Post|int $post 
    * @param boolean $force
