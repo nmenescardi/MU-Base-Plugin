@@ -486,6 +486,12 @@ class PostRepositoryTest extends WP_UnitTestCase
 			$this->exampleModel->meta_example_1, // Accessing as property
 			$some_value
 		);
+
+		// Accessing existing meta but empty
+		$this->assertEmpty($this->exampleModel->meta_example_2);
+
+		// Accessing non existing meta
+		$this->assertEmpty($this->exampleModel->nonExistingMeta);
 	}
 
 	public function merge_with_common_args($args = [])
