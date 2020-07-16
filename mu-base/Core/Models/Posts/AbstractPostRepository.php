@@ -110,7 +110,7 @@ abstract class AbstractPostRepository
 
     $posts = $this->query->query($args);
 
-    if($this->isSingleValueQuery($args))
+    if ($this->isSingleValueQuery($args))
       return !empty($posts[0]) ? $posts[0] : null;
 
     return $posts;
@@ -118,8 +118,8 @@ abstract class AbstractPostRepository
 
   protected function isSingleValueQuery($args)
   {
-    return 
-      isset($args['posts_per_page']) && 
+    return
+      isset($args['posts_per_page']) &&
       ($args['posts_per_page'] === 1 || $args['posts_per_page'] === '1');
   }
 
