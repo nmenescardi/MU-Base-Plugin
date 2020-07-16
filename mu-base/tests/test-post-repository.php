@@ -51,13 +51,13 @@ class PostRepositoryTest extends WP_UnitTestCase
 
 		$post_byID = ExampleModel::find($some_id);
 
-		$this->assertCount(1, $post_byID);
+		$this->assertNotNull($post_byID);
 
 
 		$ridiculous_large_id = 9999999999;
 		$post_byID = ExampleModel::find($ridiculous_large_id);
 
-		$this->assertCount(0, $post_byID);
+		$this->assertNull($post_byID);
 	}
 
 	public function test_get_latest_scope_in_proper_order()
