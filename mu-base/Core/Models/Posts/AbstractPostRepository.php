@@ -108,18 +108,19 @@ abstract class AbstractPostRepository
       'update_post_term_cache' => false,
     ], $args);
 
-    return $this->query->query($args);
+    $posts = $this->query->query($args);
+
+    if($this->isSingleValueQuery($args))
+      return !empty($posts[0]) ? $posts[0] : null;
+
+    return $posts;
   }
 
-  protected function findOne(array $args)
+  protected function isSingleValueQuery($args)
   {
-    $args = array_merge($args, [
-      'posts_per_page' => 1
-    ]);
-
-    $post = $this->performQuery($args);
-
-    return !empty($post[0]) ? $post[0] : null;
+    return 
+      isset($args['posts_per_page']) && 
+      ($args['posts_per_page'] === 1 || $args['posts_per_page'] === '1');
   }
 
   protected function initPropertiesMap()
