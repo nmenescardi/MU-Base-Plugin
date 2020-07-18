@@ -64,16 +64,13 @@ abstract class AbstractPostRepository
 
   public function __get($property)
   {
-    //TODO Refactor same loop
-    foreach (static::boundCPT()::meta() as $metaKey => $args) {
-
-      if ($property === $metaKey)
-        return 
-          $this->getMeta(
-            $metaKey,
-            $args['single'] ?? true
-          );
-    }
+    // Is the Property a registered metadata?
+    if( $metaArgs = $this->getSingleMetaArgs($property))
+      return 
+        $this->getMeta(
+          $property, // Key
+          $metaArgs['single'] ?? true
+        );
   }
 
   /**

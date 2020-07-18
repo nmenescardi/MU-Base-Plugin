@@ -64,4 +64,15 @@ trait HasMetaTrait
 
     return $metaArgs;
   }
+
+  protected function getSingleMetaArgs($keyToSearch)
+  {
+    foreach (static::boundCPT()::meta() as $metaKey => $args) {
+
+      if ($keyToSearch === $metaKey)
+        return $args;
+    }
+
+    return false;
+  }
 }
