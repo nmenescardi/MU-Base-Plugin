@@ -62,26 +62,17 @@ abstract class AbstractPostRepository
     return $post_id;
   }
 
-  protected function getMetaArgs(): array
-  {
-    $metaArgs = [];
-
-    foreach (static::boundCPT()::meta() as $metaKey => $args) {
-
-      if (isset($this->$metaKey))
-        $metaArgs[$metaKey] = $this->$metaKey;
-    }
-
-    return $metaArgs;
-  }
-
   public function __get($property)
   {
     //TODO Refactor same loop
     foreach (static::boundCPT()::meta() as $metaKey => $args) {
 
       if ($property === $metaKey)
-        return $this->getMeta($metaKey, true);
+        return 
+          $this->getMeta(
+            $metaKey,
+            $args['single'] ?? true
+          );
     }
   }
 

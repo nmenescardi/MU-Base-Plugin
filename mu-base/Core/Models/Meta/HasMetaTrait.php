@@ -51,4 +51,17 @@ trait HasMetaTrait
       $deleteAll
     );
   }
+
+  protected function getMetaArgs(): array
+  {
+    $metaArgs = [];
+
+    foreach (static::boundCPT()::meta() as $metaKey => $args) {
+
+      if (isset($this->$metaKey))
+        $metaArgs[$metaKey] = $this->$metaKey;
+    }
+
+    return $metaArgs;
+  }
 }
