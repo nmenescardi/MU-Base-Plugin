@@ -93,13 +93,19 @@ class CptMetaRepositoryTest extends WP_UnitTestCase
 
     // Test getting same value
     $this->assertEquals(
-      $this->exampleModel->getMeta($metaKey, true),
+      $this->exampleModel->getMeta($metaKey),
       $metaValue
     );
 
     // same value as array
     $this->assertEquals(
-      $this->exampleModel->getMeta($metaKey),
+      $this->exampleModel->getMeta($metaKey, false),
+      array($metaValue)
+    );
+
+    // same value as array but using alias method
+    $this->assertEquals(
+      $this->exampleModel->getMetaAsArray($metaKey),
       array($metaValue)
     );
 
@@ -126,12 +132,12 @@ class CptMetaRepositoryTest extends WP_UnitTestCase
     $post_id = $this->exampleModel->save();
 
     $this->assertEquals(
-      $this->exampleModel->getMeta('meta_example_1', true),
+      $this->exampleModel->getMeta('meta_example_1'),
       $some_value
     );
 
-    $this->assertEmpty($this->exampleModel->getMeta('meta_example_2', true));
-    $this->assertEmpty($this->exampleModel->getMeta('none_existing_meta', true));
+    $this->assertEmpty($this->exampleModel->getMeta('meta_example_2'));
+    $this->assertEmpty($this->exampleModel->getMeta('none_existing_meta'));
   }
 
   public function test_getting_meta_data_as_properties()
@@ -168,7 +174,7 @@ class CptMetaRepositoryTest extends WP_UnitTestCase
 
     $this->assertEquals(
       $this->exampleModel->meta_example_2,
-      array($some_value) 
+      array($some_value)
     );
   }
 

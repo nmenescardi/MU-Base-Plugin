@@ -26,8 +26,10 @@ trait HasMetaTrait
     );
   }
 
-  public function getMeta(string $key, bool $single = false, $default = false)
+  public function getMeta(string $key, bool $single = null, $default = false)
   {
+    $single = $single ?? $this->isSingleValueMeta($key);
+
     $metaValue = \get_metadata(
       $this->meta_type,
       $this->ID,
@@ -39,6 +41,11 @@ trait HasMetaTrait
       !$metaValue && $default
       ? $default
       : $metaValue;
+  }
+
+  public function getMetaAsArray(string $key, $default = false)
+  {
+    return $this->getMeta($key, false, $default);
   }
 
   public function deleteMeta(string $key, $value = '', bool $deleteAll = false)
@@ -74,5 +81,13 @@ trait HasMetaTrait
     }
 
     return false;
+  }
+
+  protected function isSingleValueMeta($key)
+  {
+    if ($args = $this->getSingleMetaArgs($key))
+      return $args['single'];
+
+    return true;
   }
 }
