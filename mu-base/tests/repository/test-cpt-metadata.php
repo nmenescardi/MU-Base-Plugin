@@ -154,6 +154,24 @@ class CptMetaRepositoryTest extends WP_UnitTestCase
     $this->assertEmpty($this->exampleModel->nonExistingMeta);
   }
 
+  /**
+   * meta_example_2 is defined as 'single'=>false.
+   * So, it expects to be retrieved as array
+   */
+  public function test_getting_not_single_meta_data_as_properties()
+  {
+    $this->exampleModel->title = 'New Post';
+    $post_id = $this->exampleModel->save();
+
+    $some_value = 'Some Value';
+    add_post_meta($post_id, 'meta_example_2', $some_value);
+
+    $this->assertEquals(
+      $this->exampleModel->meta_example_2,
+      array($some_value) 
+    );
+  }
+
   public function merge_with_common_args($args = [])
   {
     return array_merge(
