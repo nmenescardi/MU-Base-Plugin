@@ -153,7 +153,7 @@ class ScopeRepositoryTest extends WP_UnitTestCase
   public function test_get_related_scope()
   {
     $new_term = 'Term To Match';
-    $taxonomy = 'base-example';
+    $taxonomy = 'tax-example';
 
     $term = wp_insert_term(
       $new_term,

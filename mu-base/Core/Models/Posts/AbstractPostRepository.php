@@ -23,6 +23,8 @@ abstract class AbstractPostRepository
   {
     $this->query = app('wp.query');
 
+    $this->cpt_taxonomies = app('cpt_taxonomies')[self::key()] ?? [];
+
     $this->initScopes();
 
     $this->initPropertiesMap();
@@ -64,9 +66,14 @@ abstract class AbstractPostRepository
 
   public function __get($property)
   {
+    // Is the property a taxonomy attached to CPT? 
+    if (array_key_exists($property, $this->cpt_taxonomies))
+      return get_the_terms($this->ID, $this->cpt_taxonomies[$property]) ?: [];
+
+
     // Is the Property a registered metadata?
-    if( $metaArgs = $this->getSingleMetaArgs($property))
-      return 
+    if ($metaArgs = $this->getSingleMetaArgs($property))
+      return
         $this->getMeta(
           $property, // Key
           $metaArgs['single'] ?? true
