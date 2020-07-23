@@ -60,6 +60,22 @@ class ScopeRepositoryTest extends WP_UnitTestCase
     $this->assertNull($post_byID);
   }
 
+
+  public function test_receiving_model_object_type_when_querying()
+  {
+    $post_ids = $this->factory->post->create_many(
+      25,
+      $this->merge_with_common_args()
+    );
+
+    // All elements of the array are instance of the model
+    $this->assertContainsOnlyInstancesOf('MUBase\Core\Models\Posts\Example', ExampleModel::all());
+
+    // Assert individual element is retrieve as model as well
+    $some_id = $post_ids[array_rand($post_ids)]; // Grab any ID
+    $this->assertInstanceOf('MUBase\Core\Models\Posts\Example', ExampleModel::find($some_id));
+  }
+
   public function test_get_latest_scope_in_proper_order()
   {
 
