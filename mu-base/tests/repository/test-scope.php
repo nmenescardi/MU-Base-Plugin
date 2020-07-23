@@ -82,7 +82,8 @@ class ScopeRepositoryTest extends WP_UnitTestCase
     );
 
     $latest = ExampleModel::latest(3);
-    $this->assertEquals([$post_3, $post_2, $post_1], $latest);
+    $latestIDs = wp_list_pluck($latest, 'ID');
+    $this->assertEquals([$post_3->ID, $post_2->ID, $post_1->ID], $latestIDs);
 
     $post_4 = $this->factory->post->create_and_get(
       $this->merge_with_common_args([
@@ -91,10 +92,15 @@ class ScopeRepositoryTest extends WP_UnitTestCase
     );
 
     $latest = ExampleModel::latest(4);
-    $this->assertEquals([$post_4, $post_3, $post_2, $post_1], $latest);
+    $latestIDs = wp_list_pluck($latest, 'ID');
+    $this->assertEquals([$post_4->ID, $post_3->ID, $post_2->ID, $post_1->ID], $latestIDs);
 
     $latest = ExampleModel::latest(3);
-    $this->assertEquals([$post_4, $post_3, $post_2], $latest);
+    $latestIDs = wp_list_pluck($latest, 'ID');
+    $this->assertEquals([$post_4->ID, $post_3->ID, $post_2->ID], $latestIDs);
+
+    //Messing up with the order
+    $this->assertNotEquals([$post_2->ID, $post_4->ID, $post_3->ID], $latestIDs);
   }
 
   public function test_get_latest_scope_with_pagination()
