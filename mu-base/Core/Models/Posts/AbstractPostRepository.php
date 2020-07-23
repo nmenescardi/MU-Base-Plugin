@@ -193,13 +193,6 @@ abstract class AbstractPostRepository
 
   public function toPost()
   {
-    $stdObject = new stdClass();
-
-    // Fill new stdObject needed to instantiate the new WP_Post
-    foreach ($this->properties_map as $WP_prop => $object_prop) {
-      $stdObject->{$WP_prop} = $this->{$object_prop};
-    }
-
-    return new \WP_Post($stdObject);
+    return \WP_Post::get_instance($this->ID ?? -1);
   }
 }
