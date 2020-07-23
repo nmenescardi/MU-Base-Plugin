@@ -130,6 +130,7 @@ abstract class AbstractPostRepository
         'post_content'  => 'content',
         'post_author'   => 'author',
         'post_date'     => 'date',
+        'post_name'     => 'slug',
       ]
     );
   }
