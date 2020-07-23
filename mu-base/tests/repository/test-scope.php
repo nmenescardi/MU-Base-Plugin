@@ -60,7 +60,6 @@ class ScopeRepositoryTest extends WP_UnitTestCase
     $this->assertNull($post_byID);
   }
 
-
   public function test_receiving_model_object_type_when_querying()
   {
     $post_ids = $this->factory->post->create_many(

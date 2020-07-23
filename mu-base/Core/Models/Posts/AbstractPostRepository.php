@@ -4,6 +4,7 @@ namespace MUBase\Core\Models\Posts;
 
 use MUBase\Core\Models\Scopes\HasScopeTrait as HasScope;
 use MUBase\Core\Models\Meta\HasMetaTrait as HasMeta;
+use stdClass;
 
 use function MUBase\Core\Helpers\app;
 
@@ -161,7 +162,7 @@ abstract class AbstractPostRepository
 
   protected function mergeProperties(array $custom_props = [])
   {
-    $result = []; //TODO: refactor it using array_map
+    $result = [];
 
     foreach ($this->properties_map as $WP_prop => $object_prop) {
 
@@ -188,5 +189,17 @@ abstract class AbstractPostRepository
       $result['meta_input'] = $metaArgs;
 
     return $result;
+  }
+
+  public function toPost()
+  {
+    $stdObject = new stdClass();
+
+    // Fill new stdObject needed to instantiate the new WP_Post
+    foreach ($this->properties_map as $WP_prop => $object_prop) {
+      $stdObject->{$WP_prop} = $this->{$object_prop};
+    }
+
+    return new \WP_Post($stdObject);
   }
 }

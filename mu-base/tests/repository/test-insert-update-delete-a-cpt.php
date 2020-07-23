@@ -102,6 +102,28 @@ class PostRepositoryTest extends WP_UnitTestCase
 		$this->assertEquals($new_status, $post_to_match->post_status);
 	}
 
+	public function test_get_instance_of_WP_Post_class()
+	{
+		$this->exampleModel->title = 'New title';
+		$this->exampleModel->content = 'New content';
+		$this->exampleModel->date = strftime('%Y-%m-%d %H:%M:%S', strtotime('-1 day'));
+		$this->exampleModel->author = $this->author->ID;
+		$this->exampleModel->status = 'draft';
+
+		$post_id_inserting = $this->exampleModel->save(); // Insert post
+
+		$wp_post = $this->exampleModel->toPost();
+
+		$this->assertInstanceOf('WP_Post', $wp_post);
+
+		$post_to_match = get_post($post_id_inserting);
+		$this->assertEquals($wp_post->post_title, 	$post_to_match->post_title);
+		$this->assertEquals($wp_post->post_content, $post_to_match->post_content);
+		$this->assertEquals($wp_post->post_date, 		$post_to_match->post_date);
+		$this->assertEquals($wp_post->post_author, 	$post_to_match->post_author);
+		$this->assertEquals($wp_post->post_status, 	$post_to_match->post_status);
+	}
+
 	public function test_inserting_a_new_post_using_an_array_as_arg()
 	{
 		$new_title = 'New title';
