@@ -55,11 +55,7 @@ abstract class AbstractPostRepository
   {
     if (!is_numeric($post_id) || $post_id < 1) return;
 
-    $updated_post = get_post($post_id);
-
-    foreach ($this->properties_map as $WP_prop => $object_prop) {
-      $this->$object_prop = $updated_post->$WP_prop;
-    }
+    $this->fill(get_post($post_id));
 
     return $post_id;
   }
@@ -81,15 +77,18 @@ abstract class AbstractPostRepository
   }
 
   /**
-   * @param WP_Post|int $post 
+   * @param WP_Post|Model|int $post 
    * @param boolean $force
    * @return WP_Post|false|null — Post data on success, false or null on failure.
    */
   public function delete($post = null, $force = false)
   {
-    $post_id = $post instanceof \WP_Post ? $post->ID : $post;
-
-    if (!$post_id && isset($this->ID)) $post_id = $this->ID;
+    if (is_numeric($post) && $post > 0)
+      $post_id = $post;
+    elseif (isset($post->ID))
+      $post_id = $post->ID;
+    else
+      $post_id = $this->ID;
 
     return wp_delete_post($post_id, $force);
   }
@@ -103,12 +102,29 @@ abstract class AbstractPostRepository
       'update_post_term_cache' => false,
     ], $args);
 
-    $posts = $this->query->query($args);
+    return $this->convertToModel(
+      $this->query->query($args),
+      $this->isSingleValueQuery($args)
+    );
+  }
 
-    if ($this->isSingleValueQuery($args))
-      return !empty($posts[0]) ? $posts[0] : null;
+  protected function convertToModel($posts, $singleQuery = false)
+  {
+    if ($singleQuery)
+      return !empty($posts[0]) ? $this->fill($posts[0]) : null;
 
-    return $posts;
+    return array_map(function ($post) {
+      return (new static())->fill($post);
+    }, $posts);
+  }
+
+  protected function fill(\WP_Post $post)
+  {
+    foreach ($this->properties_map as $WP_prop => $object_prop) {
+      $this->$object_prop = $post->$WP_prop;
+    }
+
+    return $this;
   }
 
   protected function isSingleValueQuery($args)
