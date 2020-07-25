@@ -149,6 +149,7 @@ abstract class AbstractPostRepository
         'post_date'     => 'date',
         'post_name'     => 'slug',
         'post_excerpt'  => 'excerpt',
+        'post_parent'   => 'parent',
       ]
     );
   }
